@@ -5,7 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Data Santri - Manajemen Peserta Didik</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- SheetJS Library (untuk membaca file Excel .xlsx & .csv) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;600&display=swap');
 
@@ -16,576 +20,758 @@
         .font-serif {
             font-family: 'Playfair Display', serif;
         }
+
+        .data-table {
+            border-collapse: separate;
+            border-spacing: 0;
+            width: 100%;
+        }
+
+        .data-table th,
+        .data-table td {
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
+        .data-table thead th {
+            background-color: #163c6b;
+            color: #e2e8f0;
+        }
+
+        .data-table tbody tr:nth-child(odd) {
+            background-color: #f8fafc;
+        }
+
+        .data-table tbody tr:nth-child(even) {
+            background-color: #eef2ff;
+        }
+
+        .data-table tbody tr:hover {
+            background-color: #e2e8f0;
+        }
+
+        .data-table th {
+            border-bottom: 1px solid rgba(148, 163, 184, 0.25);
+        }
+
+        .data-table td {
+            border-bottom: 1px solid rgba(203, 213, 225, 0.15);
+        }
+
+        .data-table tbody tr:hover {
+            background-color: rgba(15, 23, 42, 0.08);
+        }
+
+        .data-table th {
+            border-bottom: 1px solid rgba(148, 163, 184, 0.25);
+        }
+
+        .data-table td {
+            border-bottom: 1px solid rgba(203, 213, 225, 0.15);
+        }
+
+        /* Shake animation for locked input */
+        @keyframes shake-x {
+            0% { transform: translateX(0); }
+            20% { transform: translateX(-6px); }
+            40% { transform: translateX(6px); }
+            60% { transform: translateX(-4px); }
+            80% { transform: translateX(4px); }
+            100% { transform: translateX(0); }
+        }
+
+        .shake {
+            animation: shake-x 0.6s cubic-bezier(.36,.07,.19,.97);
+        }
+        @keyframes slideFromLine {
+            0% {
+                opacity: 0;
+                transform: translateX(-100%);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .animate-text-reveal {
+            animation: slideFromLine 2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
     </style>
 </head>
 
 <body class="bg-gradient-to-b from-black-100 via-black-200 to-black-300 min-h-screen pb-28">
-    <!-- Password Modal -->
-    <div id="passwordModal" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center z-50">
-        <div class="bg-white rounded-lg shadow-2xl p-6 md:p-10 w-[90%] max-w-md">
-            <h2 class="text-2xl md:text-3xl font-bold text-[#1e4680] mb-2">🔐 Verifikasi Password</h2>
-            <p class="text-black-600 mb-8">Masukkan password untuk mengubah data santri</p>
-            <div class="space-y-4">
-                <input type="password" id="passwordInput" placeholder="Masukkan password..." 
-                    class="w-full px-4 py-3 border-2 border-black-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-[#D4AF37]">
-                <div id="passwordError" class="text-red-600 text-sm font-semibold hidden">❌ Password salah. Silakan coba lagi.</div>
-                <button onclick="checkPassword()" 
-                    class="w-full bg-[#D4AF37] hover:bg-yellow-500 text-[#1e4680] font-bold py-3 rounded-lg transition">
-                    Verifikasi
-                </button>
-         `       <button onclick="closePasswordModal()" 
-                    class="w-full bg-black-400 hover:bg-black-500 text-white font-semibold py-3 rounded-lg transition">
-                    Batal
-                </button>
+
+    <div class="container mx-auto px-4 py-1">
+        <main class="max-w-5xl mx-auto py-1 px-6">
+            <nav class="fixed bottom-0 left-0 right-0 z-50 bg-gradient-to-b from-[#1e4680] to-[#111827] text-gray-100 border-t border-gray-800">
+            <div class="max-w-6xl mx-auto px-4 flex justify-between items-center">
+                <a href="index.html" class="flex-1 text-center flex flex-col items-center justify-center py-3">
+                    <span class="text-2xl">🏠</span>
+                    <span class="text-[11px] mt-1">Beranda</span>
+                </a>
+
+                <a href="program.html" class="flex-1 text-center flex flex-col items-center justify-center py-3">
+                    <span class="text-2xl">🎓</span>
+                    <span class="text-[11px] mt-1">Program</span>
+                </a>
+
+                <a href="jadwal.html" class="flex-1 text-center flex flex-col items-center justify-center py-3">
+                    <span class="text-2xl">🕘</span>
+                    <span class="text-[11px] mt-1">Jadwal</span>
+                </a>
+
+                <a href="agenda.html" class="flex-1 text-center flex flex-col items-center justify-center py-3">
+                    <span class="text-2xl">🗓️</span>
+                    <span class="text-[11px] mt-1">Agenda</span>
+                </a>
+
+                <a href="data_santri.html" class="flex-1 text-center flex flex-col items-center justify-center py-3">
+                    <span class="text-2xl">👥</span>
+                    <span class="text-[11px] mt-1">Data</span>
+                </a>
             </div>
-            <p class="text-center text-black-500 text-xs mt-6">Password: <span class="bg-black-100 px-2 py-1 rounded font-mono text-[#1e4680]">Santri2026!</span></p>
-        </div>
-    </div>
-
-    <div class="container mx-auto px-4 py-12">
-        <!-- Header -->
-        <div class="mb-8 justify-center">
-            <h1 class="text-black-800 text-4xl text-center font-serif font-bold mb-2 uppercase tracking-tight">Data Santri</h1>
-            <p class="text-black-700 text-base md:text-lg text-center md:text-left">Sistem informasi peserta didik terintegrasi</p>
-        </div>
-
-        <nav class="fixed bottom-0 left-0 right-0 z-50 bg-black-900 text-black-200 border-t border-black-800">
-                <div class="max-w-6xl mx-auto px-4">
-                    <ul class="flex justify-between items-center">
-                        <li class="flex-1 text-center">
-                            <a href="index.html" class="flex flex-col items-center justify-center py-3">
-                                <span class="text-2xl">🏠</span>
-                                <span class="text-[11px] mt-1">Beranda</span>
-                            </a>
-                        </li>
-                        <li class="flex-1 text-center">
-                            <a href="program.html" class="flex flex-col items-center justify-center py-3">
-                                <span class="text-2xl">🎓</span>
-                                <span class="text-[11px] mt-1">Program</span>
-                            </a>
-                        </li>
-                        <li class="flex-1 text-center">
-                            <a href="jadwal.html" class="flex flex-col items-center justify-center py-3">
-                                <span class="text-2xl">🕘</span>
-                                <span class="text-[11px] mt-1">Jadwal</span>
-                            </a>
-                        </li>
-                        <li class="flex-1 text-center">
-                            <a href="agenda.html" class="flex flex-col items-center justify-center py-3">
-                                <span class="text-2xl">🗓️</span>
-                                <span class="text-[11px] mt-1">Agenda</span>
-                            </a>
-                        </li>
-                        <li class="flex-1 text-center">
-                            <a href="#" class="flex flex-col items-center justify-center py-3">
-                                <span class="text-2xl">👥</span>
-                                <span class="text-[11px] mt-1">Data</span>
-                            </a>
-                        </li>
-                    </ul>
+        </nav>
+        </main>
+        <div class="border-l-4 border-[#D4AF37] pl-4 my-6 overflow-hidden">
+                <div class="animate-text-reveal">
+                    <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold font-serif text-slate-800 leading-tight">
+                        Data <span class="text-[#1e4680]">Santri</span>
+                    </h1>
+                    <p class="text-xs sm:text-sm lg:text-base text-slate-600 mt-1.5 sm:mt-2 max-w-2xl leading-relaxed">
+                        Mengontrol Data Rekapan Santri pertahun, Mulai dari Tahun masuk, Kuantitas dan Kualitas hafalan
+                    </p>
                 </div>
-            </nav>
-
-        <!-- Tabel Utama: Toggle antara Display dan Input -->
-        <div class="bg-white rounded-lg shadow-xl p-8 mb-12 border-t-4 border-[#D4AF37]">
+            </div>
+        <!-- Tabel Utama -->
+        <div class="bg-white rounded-3xl shadow-2xl p-8 mb-12 border-t-4 border-[#D4AF37]">
             <!-- DISPLAY MODE -->
             <div id="displayMode">
-                <div class="flex items-center justify-between mb-6">
-                    <div>
-                        <h2 class="text-3xl font-bold text-[#1e4680] mb-1">📊 Data Progress Santri</h2>
-                        <p class="text-black-600">Rekapitulasi progress murajaah dan performa santri</p>
-                    </div>
-                    <span class="bg-green-100 text-green-800 px-6 py-3 rounded-full text-sm font-bold">✓ Publik</span>
-                </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full border-collapse border border-black-300">
-                        <thead>
-                            <tr class="bg-gradient-to-r from-[#1e4680] to-[#2a5ba8] text-white">
-                                <th class="border border-black-400/30 px-4 py-2 text-center font-semibold text-sm">No</th>
-                                <th class="border border-black-400/30 px-4 py-2 text-center font-semibold text-sm">Nama Santri</th>
-                                <th class="border border-black-400/30 px-4 py-2 text-center font-semibold text-sm">Halaqah</th>
-                                <th class="border border-black-400/30 px-4 py-2 text-center font-semibold text-sm">Target Juz</th>
-                                <th class="border border-black-400/30 px-4 py-2 text-center font-semibold text-sm">Realisasi Juz</th>
-                                <th class="border border-black-400/30 px-4 py-2 text-center font-semibold text-sm">Progress</th>
-                                <th class="border border-black-400/30 px-4 py-2 text-center font-semibold text-sm">Nilai Akhir</th>
-                                <th class="border border-black-400/30 px-4 py-2 text-center font-semibold text-sm">Status</th>
-                                <th class="border border-black-400/30 px-4 py-2 text-center font-semibold text-sm">Predikat</th>
-                                <th class="border border-black-400/30 px-4 py-2 text-center font-semibold text-sm">Rekomendasi</th>
+                <div class="overflow-x-auto rounded-3xl border border-slate-200/80 shadow-sm max-h-[65vh] overflow-y-auto">
+                    <table class="min-w-full w-full text-left data-table table-auto" id="dataTable">
+                        <thead id="tableHead" class="bg-[#1e4680] text-white text-xs uppercase tracking-[0.2em]">
+                            <tr>
+                                <th class="px-6 py-4 font-semibold text-left border-b border-[#163c6b]">Silakan upload file Excel atau CSV</th>
                             </tr>
                         </thead>
-                        <tbody id="tabel1Body">
-                            <!-- Data akan ditampilkan oleh JavaScript -->
+                        <tbody id="tableBody" class="text-sm text-slate-700">
+                            <tr>
+                                <td class="px-6 py-8 text-center text-slate-400 italic">Belum ada data. Silakan upload file Excel atau CSV terlebih dahulu.</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
-                <div class="mt-8 flex flex-col md:flex-row gap-4 items-center">
-                    <p class="text-black-600 font-semibold">✓ Total Data: <span id="totalCount">0</span> santri</p>
-                    <button onclick="openPasswordModal()" 
-                        class="w-full md:w-auto md:ml-auto bg-[#D4AF37] hover:bg-yellow-500 text-[#1e4680] font-bold py-3 px-8 rounded-lg transition shadow-lg">
-                        ✏️ Input / Edit Data
-                    </button>
-                </div>
-            </div>
-
-            <!-- INPUT MODE -->
-            <div id="inputMode" class="hidden">
-                <div class="flex items-center justify-between mb-6">
-                    <div>
-                        <h2 class="text-3xl font-bold text-[#1e4680] mb-1">✏️ Form Input / Edit Data Progress</h2>
-                        <p class="text-black-600">Input data murajaah santri (akses terbatas dengan password)</p>
-                    </div>
-                    <span class="bg-red-100 text-red-800 px-6 py-3 rounded-full text-sm font-bold">🔒 Terlindungi</span>
-                </div>
-
-                <div class="overflow-x-auto">
-                    <table class="w-full border-collapse border border-black-300">
-                        <thead>
-                            <tr class="bg-gradient-to-r from-[#1e4680] to-[#2a5ba8] text-white">
-                                <th class="border border-black-400/30 px-4 py-2 text-center font-semibold text-sm">No</th>
-                                <th class="border border-black-400/30 px-4 py-2 text-left font-semibold text-sm">Nama Santri</th>
-                                <th class="border border-black-400/30 px-4 py-2 text-left font-semibold text-sm">Halaqah</th>
-                                <th class="border border-black-400/30 px-4 py-2 text-center font-semibold text-sm">Target Juz</th>
-                                <th class="border border-black-400/30 px-4 py-2 text-center font-semibold text-sm">Realisasi Juz</th>
-                                <th class="border border-black-400/30 px-4 py-2 text-center font-semibold text-sm">Murajaah</th>
-                                <th class="border border-black-400/30 px-4 py-2 text-center font-semibold text-sm">Adab</th>
-                                <th class="border border-black-400/30 px-4 py-2 text-center font-semibold text-sm">Kehadiran</th>
-                                <th class="border border-black-400/30 px-4 py-2 text-center font-semibold text-sm">Status</th>
-                                <th class="border border-black-400/30 px-4 py-2 text-left font-semibold text-sm">Catatan</th>
-                                <th class="border border-black-400/30 px-4 py-2 text-center font-semibold text-sm">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tabel2Body">
-                            <!-- Data akan ditampilkan oleh JavaScript -->
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="mt-8 bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded mb-8">
-                    <p class="text-yellow-800 text-sm"><strong>⚠️ Catatan:</strong> Tekan <strong>Enter</strong> untuk beralih ke kolom berikutnya. Progress otomatis dihitung. Nilai Akhir = (Murajaah + Adab + Kehadiran) ÷ 3</p>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <button onclick="addNewRow()" 
-                        class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition shadow-lg">
-                        ➕ Tambah Baris
-                    </button>
-                    <button onclick="saveAllData()" 
-                        class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-lg transition shadow-lg">
-                        💾 Simpan Semua Data
-                    </button>
-                    <button onclick="closeInputMode()" 
-                        class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-lg transition shadow-lg">
-                        🚪 Batal
-                    </button>
+                <div class="flex justify-between items-center p-4 rounded-lg">
+                    <p id="uploadDate" class="text-xs text-slate-400 italic text-left">Terakhir kali di upload : -</p>
+                    <p id="rowCount" class="text-xs text-slate-400 italic text-right">0 baris data dimuat</p>
                 </div>
             </div>
         </div>
+                <!-- Upload, Remove, and change pass -->
+        <div class="bg-slate-950 p-8 rounded-3xl shadow-xl ring-1 ring-slate-200/10 text-center mb-8">
+            <div class="max-w-md mx-auto space-y-4">
+                <div>
+                    <input type="file" id="excelFile" accept=".xlsx, .xls, .csv" class="hidden">
+                    <button id="startAuthBtn" type="button" onclick="document.getElementById('authSection').classList.remove('hidden'); document.getElementById('authSection').style.display='block'; document.getElementById('authPassword').focus();" class="cursor-pointer bg-slate-700 text-white font-semibold px-6 py-4 rounded-2xl transition duration-200 text-sm shadow-sm mt-3">
+                        Masuk (Edit)
+                    </button>
+                    <div id="dropZone" class="hidden cursor-pointer border-2 border-dashed border-slate-700 rounded-2xl py-6 px-4 text-center">
+                        <p id="dropZoneText" class="text-slate-300 mb-3">Tarik & lepaskan file di sini, atau klik untuk memilih file</p>
+                        <button id="uploadButton" type="button" class="bg-gradient-to-r from-[#1e4680] to-[#2a5ba8] hover:from-[#163c6b] hover:to-[#234f91] text-white font-semibold px-6 py-3 rounded-2xl transition duration-200 inline-block text-sm shadow-lg shadow-slate-900/10">
+                            Pilih File Excel / CSV
+                        </button>
+                    </div>
+                </div>
+                <div class="flex flex-wrap items-center justify-center gap-3" id="actionButtonGroup">
+                    <button id="deleteDataBtn" type="button" class="hidden bg-red-600 hover:bg-red-700 text-white font-semibold px-5 py-3 rounded-2xl transition shadow-sm shadow-red-500/10">
+                        Hapus Data
+                    </button>
+                    <button id="logoutBtn" type="button" class="hidden bg-slate-700 hover:bg-slate-800 text-white font-semibold px-5 py-3 rounded-2xl transition shadow-sm shadow-slate-900/10">
+                        Keluar
+                    </button>
+                </div>
 
-        <!-- Info -->
-        <div class="mt-8 bg-blue-50 border-l-4 border-blue-500 p-6 rounded">
-            <h3 class="font-bold text-blue-900 mb-3">ℹ️ Cara Penggunaan</h3>
-            <ul class="text-blue-800 space-y-2 text-sm">
-                <li>✓ <strong>Data Progress:</strong> Dapat dilihat oleh semua orang, tidak perlu password</li>
-                <li>✓ <strong>Input / Edit Data:</strong> Klik tombol "Input / Edit Data" untuk membuka form</li>
-                <li>✓ <strong>Password:</strong> <code class="bg-white px-2 py-1 rounded font-mono text-[#1e4680]">Santri2026!</code></li>
-                <li>✓ <strong>Input dengan Enter:</strong> Tekan <strong>Enter</strong> untuk beralih ke kolom input berikutnya</li>
-                <li>✓ <strong>Auto-Calculate:</strong> Progress dan Nilai Akhir dihitung otomatis</li>
-                <li>✓ <strong>Simpan Data:</strong> Klik "Simpan Semua Data" untuk menyimpan (otomatis kembali ke display)</li>
-                <li>✓ <strong>Hapus Baris:</strong> Klik tombol "Hapus" untuk menghapus data</li>
-                <li>✓ <strong>Tambah Baris:</strong> Klik tombol "Tambah Baris" untuk input data baru</li>
-            </ul>
+                <!-- FORM EDIT PASSWORD (Disembunyikan secara default) -->
+                <div id="changePwSection" class="hidden mt-4 p-4 border border-slate-700 bg-slate-800 rounded-lg space-y-3 w-full max-w-full" style="min-height: 14rem;">
+                    <div>
+                        <label class="block text-xs text-slate-400">Password Baru:</label>
+                        <input type="password" id="newPasswordInput" placeholder="Minimal 6 karakter" 
+                            class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-sm text-white focus:outline-none focus:border-amber-500">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs text-slate-400 mb-1">Konfirmasi Password Baru:</label>
+                        <input type="password" id="confirmPasswordInput" placeholder="Ulangi password baru" 
+                            class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-sm text-white focus:outline-none focus:border-amber-500">
+                    </div>
+
+                    <div class="flex gap-2 pt-2 mt-4">
+                        <button id="savePwBtn" class="flex-1 bg-gradient-to-r from-[#1e4680] to-[#2a5ba8] hover:from-[#163c6b] hover:to-[#234f91] text-white font-semibold px-5 py-3 rounded-2xl text-sm shadow-lg shadow-slate-900/10 transition duration-200">
+                            Simpan
+                        </button>
+                        <button id="cancelPwBtn" class="flex-1 bg-slate-700 hover:bg-slate-600 text-slate-300 font-semibold px-5 py-3 rounded-2xl text-sm transition duration-200">
+                            Batal
+                        </button>
+                    </div>
+                </div>
+                <div class="mt-6 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                    <p id="authInfo" class="hidden text-sm text-slate-500 italic">
+                        Data yang diunggah akan tersimpan hingga dihapus atau diunggah ulang.
+                        <button id="openChangePwBtn" type="button" class="text-blue-400 hover:text-blue-200 underline font-semibold">
+                            klik disini
+                        </button>
+                        untuk mengubah password.
+                    </p>
+                </div>
+                <div id="authSection" class="mt-4 hidden rounded-3xl border border-slate-700 bg-slate-950/80 px-4 py-4 text-left shadow-inner">
+                    <p class="text-sm text-slate-300 mb-3">Masukkan password untuk mengaktifkan upload atau hapus data.</p>
+                    <div class="flex flex-col gap-3 sm:flex-row">
+                        <input id="authPassword" type="password" placeholder="Password" class="w-full rounded-2xl border border-slate-600 bg-slate-900 px-4 py-3 text-slate-100 focus:border-[#1e4680] focus:outline-none" />
+                        <button id="authSubmitBtn" type="button" class="rounded-2xl bg-[#1e4680] text-white font-semibold px-5 py-3 hover:bg-[#163c6b] transition">Verifikasi</button>
+                    </div>
+                    <p id="authMessage" class="text-white text-xs mt-3 text-slate-400"></p>
+                </div>
+                <p class="text-xs text-slate-400" id="fileName">Format yang didukung: .xlsx, .xls, .csv</p>
+            </div>
         </div>
     </div>
 
+    <!-- JavaScript Logic -->
     <script>
-        const PASSWORD = 'Santri2026!';
+        // Edit password Button
+
+        // 1. Inisialisasi Elemen DOM
+        const openChangePwBtn = document.getElementById('openChangePwBtn');
+        const authInfoParagraph = document.getElementById('authInfo');
+        const changePwSection = document.getElementById('changePwSection');
+        const newPasswordInput = document.getElementById('newPasswordInput');
+        const confirmPasswordInput = document.getElementById('confirmPasswordInput');
+        const savePwBtn = document.getElementById('savePwBtn');
+        const cancelPwBtn = document.getElementById('cancelPwBtn');
+
+        // 2. Event Buka/Tutup Form Edit Password
+        if (openChangePwBtn) {
+            openChangePwBtn.addEventListener('click', () => {
+                if (!isAuthenticated) {
+                    alert("Akses Ditolak! Anda harus memasukkan password terlebih dahulu.");
+                    return;
+                }
+                const isOpen = !changePwSection.classList.contains('hidden');
+                changePwSection.classList.toggle('hidden');
+                if (isOpen) {
+                    authInfoParagraph?.classList.remove('hidden');
+                } else {
+                    authInfoParagraph?.classList.add('hidden');
+                }
+            });
+        }
+
+        // 3. Tombol Batal
+        cancelPwBtn.addEventListener('click', () => {
+            changePwSection.classList.add('hidden');
+            newPasswordInput.value = '';
+            confirmPasswordInput.value = '';
+            authInfoParagraph?.classList.remove('hidden');
+        });
+
+        // 4. Eksekusi Simpan Password Baru
+        savePwBtn.addEventListener('click', async () => {
+            // SECURITY CHECK DOUBLE: Mencegah eksekusi jika status belum login
+            if (!isAuthenticated) {
+                alert("Akses Ditolak! Sesi Anda belum terautentikasi.");
+                return;
+            }
+
+            const newPw = newPasswordInput.value;
+            const confirmPw = confirmPasswordInput.value;
+
+            // Validasi Sederhana
+            if (newPw.length < 6) {
+                return alert("Password baru minimal 6 karakter!");
+            }
+
+            if (newPw !== confirmPw) {
+                return alert("Konfirmasi password baru tidak cocok!");
+            }
+
+            try {
+                // Buat Salt baru dan Hash baru
+                const newSalt = generateSalt();
+                const newHash = await pbkdf2Hash(newPw, newSalt);
+
+                    // Simpan perubahan ke LocalStorage dengan key yang sama seperti inisialisasi
+                    localStorage.setItem(STORAGE_PW, JSON.stringify({ salt: newSalt, hash: newHash, iterations: 100000 }));
+                confirmPasswordInput.value = '';
+                changePwSection.classList.add('hidden');
+                authInfoParagraph?.classList.remove('hidden');
+
+            } catch (error) {
+                console.error("Gagal mengubah password:", error);
+                alert("Terjadi kesalahan saat memproses password.");
+            }
+        });
+
+
+
+
+
+
+
+
+
+        const STORAGE_KEY = 'dataSantriSavedData';
+        const STORAGE_NAME = 'dataSantriFileName';
+        const STORAGE_PW = 'dataSantriEditPassword';
+        const STORAGE_DATE = 'dataSantriUploadDate';
+        const STORAGE_FAIL = 'dataSantriAuthFail';
+        const DEFAULT_PW = 'santri2026';
+        const LOCK_DURATION_MS = 2 * 60 * 1000; // 2 minutes
+
         let isAuthenticated = false;
-        let dataStorage = JSON.parse(localStorage.getItem('santriData')) || [];
 
-        // Sample Data
-        const sampleData = [
-            {
-                id: 1,
-                namaSantri: 'Ahmad Fauzan',
-                halaqah: 'Halaqah A',
-                targetJuz: 10.0,
-                realisasiJuz: 7.5,
-                murajaah: 85.0,
-                adab: 88.0,
-                kehadiran: 90.0,
-                status: 'On Track',
-                catatan: 'Pertahankan ritme murojaah'
-            },
-            {
-                id: 2,
-                namaSantri: 'Nur Azizah',
-                halaqah: 'Halaqah B',
-                targetJuz: 12.0,
-                realisasiJuz: 10.5,
-                murajaah: 88.0,
-                adab: 90.0,
-                kehadiran: 92.0,
-                status: 'On Track',
-                catatan: 'Sangat baik, teruskan'
-            },
-            {
-                id: 3,
-                namaSantri: 'Muhammad Hasan',
-                halaqah: 'Halaqah A',
-                targetJuz: 8.0,
-                realisasiJuz: 6.0,
-                murajaah: 80.0,
-                adab: 82.0,
-                kehadiran: 85.0,
-                status: 'Sedang',
-                catatan: 'Perlu dorongan ziadah'
-            },
-            {
-                id: 4,
-                namaSantri: 'Siti Fatimah',
-                halaqah: 'Halaqah C',
-                targetJuz: 10.0,
-                realisasiJuz: 8.5,
-                murajaah: 86.0,
-                adab: 87.0,
-                kehadiran: 88.0,
-                status: 'On Track',
-                catatan: 'Progres baik'
+        const uploadButton = document.getElementById('uploadButton');
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('excelFile');
+        const deleteDataBtn = document.getElementById('deleteDataBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const authSection = document.getElementById('authSection');
+        const fileNameLabel = document.getElementById('fileName');
+        const startAuthBtn = document.getElementById('startAuthBtn');
+        const uploadDateEl = document.getElementById('uploadDate');
+
+        // util: ArrayBuffer <-> Base64
+        function arrayBufferToBase64(buffer) {
+            const bytes = new Uint8Array(buffer);
+            let binary = '';
+            for (let i = 0; i < bytes.byteLength; i++) {
+                binary += String.fromCharCode(bytes[i]);
             }
-        ];
-
-        // Inisialisasi data
-        if (dataStorage.length === 0) {
-            dataStorage = JSON.parse(JSON.stringify(sampleData));
-            localStorage.setItem('santriData', JSON.stringify(dataStorage));
+            return btoa(binary);
         }
 
-        // Hitung Progress
-        function hitungProgress(targetJuz, realisasiJuz) {
-            if (targetJuz === 0) return 0;
-            return parseFloat(((realisasiJuz / targetJuz) * 100).toFixed(1));
+        function base64ToArrayBuffer(base64) {
+            const binary = atob(base64);
+            const len = binary.length;
+            const bytes = new Uint8Array(len);
+            for (let i = 0; i < len; i++) {
+                bytes[i] = binary.charCodeAt(i);
+            }
+            return bytes.buffer;
         }
 
-        // Hitung Nilai Akhir
-        function hitungNilaiAkhir(murajaah, adab, kehadiran) {
-            return parseFloat(((murajaah + adab + kehadiran) / 3).toFixed(1));
+        async function pbkdf2Hash(password, saltBase64, iterations = 100000) {
+            const enc = new TextEncoder();
+            const pwKey = await crypto.subtle.importKey('raw', enc.encode(password), { name: 'PBKDF2' }, false, ['deriveBits']);
+            const salt = base64ToArrayBuffer(saltBase64);
+            const derived = await crypto.subtle.deriveBits({ name: 'PBKDF2', salt: salt, iterations: iterations, hash: 'SHA-256' }, pwKey, 256);
+            return arrayBufferToBase64(derived);
         }
 
-        // Tentukan Predikat
-        function tentukanPredikat(nilaiAkhir) {
-            if (nilaiAkhir >= 90) return 'Imtiyaz';
-            if (nilaiAkhir >= 85) return 'Jayyid Jiddan';
-            if (nilaiAkhir >= 80) return 'Jayyid';
-            if (nilaiAkhir >= 70) return 'Maqbul';
-            return 'Belum Tuntas';
+        function generateSalt() {
+            const arr = crypto.getRandomValues(new Uint8Array(16));
+            return arrayBufferToBase64(arr.buffer);
         }
 
-        // Tentukan Rekomendasi
-        function tentukanRekomendasi(progress, nilaiAkhir) {
-            if (progress < 60) return 'Tingkatkan target hafalan';
-            if (nilaiAkhir < 75) return 'Perlu dorongan ziadah';
-            if (progress >= 80 && nilaiAkhir >= 85) return 'Pertahankan ritme murojaah';
-            return 'Memuaskan, teruskan usaha';
+        function readFailState() {
+            const raw = localStorage.getItem(STORAGE_FAIL);
+            if (!raw) return { count: 0, lockUntil: 0 };
+            try { return JSON.parse(raw); } catch { return { count: 0, lockUntil: 0 }; }
         }
 
-        // Render Display Mode (Tabel 1)
-        function renderDisplayMode() {
-            const tbody = document.getElementById('tabel1Body');
-            tbody.innerHTML = '';
-
-            dataStorage.forEach((item, index) => {
-                const progress = hitungProgress(item.targetJuz, item.realisasiJuz);
-                const nilaiAkhir = hitungNilaiAkhir(item.murajaah, item.adab, item.kehadiran);
-                const predikat = tentukanPredikat(nilaiAkhir);
-                const rekomendasi = tentukanRekomendasi(progress, nilaiAkhir);
-
-                const tr = document.createElement('tr');
-                tr.className = 'hover:bg-blue-50 transition';
-                tr.innerHTML = `
-                    <td class="border border-black-200 px-4 py-2 text-center font-semibold text-black-700">${index + 1}</td>
-                    <td class="border border-black-200 px-4 py-2 text-black-700">${item.namaSantri}</td>
-                    <td class="border border-black-200 px-4 py-2 text-center text-black-700">${item.halaqah}</td>
-                    <td class="border border-black-200 px-4 py-2 text-center text-black-700">${item.targetJuz.toFixed(1)}</td>
-                    <td class="border border-black-200 px-4 py-2 text-center text-black-700">${item.realisasiJuz.toFixed(1)}</td>
-                    <td class="border border-black-200 px-4 py-2 text-center">
-                        <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-semibold">${progress.toFixed(1)}%</span>
-                    </td>
-                    <td class="border border-black-200 px-4 py-2 text-center font-semibold text-black-700">${nilaiAkhir.toFixed(1)}</td>
-                    <td class="border border-black-200 px-4 py-2 text-center">
-                        <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-semibold">${item.status}</span>
-                    </td>
-                    <td class="border border-black-200 px-4 py-2 text-center">
-                        <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-semibold">${predikat}</span>
-                    </td>
-                    <td class="border border-black-200 px-4 py-2 text-black-700 text-sm">${rekomendasi}</td>
-                `;
-                tbody.appendChild(tr);
-            });
-
-            document.getElementById('totalCount').textContent = dataStorage.length;
+        function writeFailState(state) {
+            localStorage.setItem(STORAGE_FAIL, JSON.stringify(state));
         }
 
-        // Render Input Mode (Tabel 2)
-        function renderInputMode() {
-            const tbody = document.getElementById('tabel2Body');
-            tbody.innerHTML = '';
-
-            dataStorage.forEach((item, index) => {
-                const progress = hitungProgress(item.targetJuz, item.realisasiJuz);
-                const nilaiAkhir = hitungNilaiAkhir(item.murajaah, item.adab, item.kehadiran);
-
-                const tr = document.createElement('tr');
-                tr.className = 'hover:bg-blue-50 transition input-row';
-                tr.innerHTML = `
-                    <td class="border border-black-200 px-4 py-2 text-center font-semibold text-black-700">${index + 1}</td>
-                    <td class="border border-black-200 px-4 py-2">
-                        <input type="text" class="w-full px-2 py-1 border border-black-300 rounded focus:outline-none focus:ring-2 focus:ring-[#D4AF37]" 
-                            value="${item.namaSantri}" 
-                            data-field="namaSantri" 
-                            data-id="${item.id}"
-                            data-row-index="${index}"
-                            data-col="0"
-                            onkeydown="handleTabKey(event, ${item.id}, 'namaSantri', ${index})">
-                    </td>
-                    <td class="border border-black-200 px-4 py-2">
-                        <select class="w-full px-2 py-1 border border-black-300 rounded focus:outline-none focus:ring-2 focus:ring-[#D4AF37]" 
-                            data-field="halaqah" 
-                            data-id="${item.id}"
-                            data-row-index="${index}"
-                            data-col="1"
-                            onkeydown="handleTabKey(event, ${item.id}, 'halaqah', ${index})">
-                            <option value="Halaqah A" ${item.halaqah === 'Halaqah A' ? 'selected' : ''}>Halaqah A</option>
-                            <option value="Halaqah B" ${item.halaqah === 'Halaqah B' ? 'selected' : ''}>Halaqah B</option>
-                            <option value="Halaqah C" ${item.halaqah === 'Halaqah C' ? 'selected' : ''}>Halaqah C</option>
-                        </select>
-                    </td>
-                    <td class="border border-black-200 px-4 py-2">
-                        <input type="number" step="0.1" class="w-full px-2 py-1 border border-black-300 rounded focus:outline-none focus:ring-2 focus:ring-[#D4AF37]" 
-                            value="${item.targetJuz}" 
-                            data-field="targetJuz" 
-                            data-id="${item.id}"
-                            data-row-index="${index}"
-                            data-col="2"
-                            onchange="updateData(${item.id}, 'targetJuz', this.value); renderInputMode();"
-                            onkeydown="handleTabKey(event, ${item.id}, 'targetJuz', ${index})">
-                    </td>
-                    <td class="border border-black-200 px-4 py-2">
-                        <input type="number" step="0.1" class="w-full px-2 py-1 border border-black-300 rounded focus:outline-none focus:ring-2 focus:ring-[#D4AF37]" 
-                            value="${item.realisasiJuz}" 
-                            data-field="realisasiJuz" 
-                            data-id="${item.id}"
-                            data-row-index="${index}"
-                            data-col="3"
-                            onchange="updateData(${item.id}, 'realisasiJuz', this.value); renderInputMode();"
-                            onkeydown="handleTabKey(event, ${item.id}, 'realisasiJuz', ${index})">
-                    </td>
-                    <td class="border border-black-200 px-4 py-2">
-                        <input type="number" step="0.1" class="w-full px-2 py-1 border border-black-300 rounded focus:outline-none focus:ring-2 focus:ring-[#D4AF37]" 
-                            value="${item.murajaah}" 
-                            data-field="murajaah" 
-                            data-id="${item.id}"
-                            data-row-index="${index}"
-                            data-col="4"
-                            onchange="updateData(${item.id}, 'murajaah', this.value); renderInputMode();"
-                            onkeydown="handleTabKey(event, ${item.id}, 'murajaah', ${index})">
-                    </td>
-                    <td class="border border-black-200 px-4 py-2">
-                        <input type="number" step="0.1" class="w-full px-2 py-1 border border-black-300 rounded focus:outline-none focus:ring-2 focus:ring-[#D4AF37]" 
-                            value="${item.adab}" 
-                            data-field="adab" 
-                            data-id="${item.id}"
-                            data-row-index="${index}"
-                            data-col="5"
-                            onchange="updateData(${item.id}, 'adab', this.value); renderInputMode();"
-                            onkeydown="handleTabKey(event, ${item.id}, 'adab', ${index})">
-                    </td>
-                    <td class="border border-black-200 px-4 py-2">
-                        <input type="number" step="0.1" class="w-full px-2 py-1 border border-black-300 rounded focus:outline-none focus:ring-2 focus:ring-[#D4AF37]" 
-                            value="${item.kehadiran}" 
-                            data-field="kehadiran" 
-                            data-id="${item.id}"
-                            data-row-index="${index}"
-                            data-col="6"
-                            onchange="updateData(${item.id}, 'kehadiran', this.value); renderInputMode();"
-                            onkeydown="handleTabKey(event, ${item.id}, 'kehadiran', ${index})">
-                    </td>
-                    <td class="border border-black-200 px-4 py-2">
-                        <select class="w-full px-2 py-1 border border-black-300 rounded focus:outline-none focus:ring-2 focus:ring-[#D4AF37]" 
-                            data-field="status" 
-                            data-id="${item.id}"
-                            data-row-index="${index}"
-                            data-col="7"
-                            onchange="updateData(${item.id}, 'status', this.value);"
-                            onkeydown="handleTabKey(event, ${item.id}, 'status', ${index})">
-                            <option value="On Track" ${item.status === 'On Track' ? 'selected' : ''}>On Track</option>
-                            <option value="Sedang" ${item.status === 'Sedang' ? 'selected' : ''}>Sedang</option>
-                            <option value="Tertinggal" ${item.status === 'Tertinggal' ? 'selected' : ''}>Tertinggal</option>
-                        </select>
-                    </td>
-                    <td class="border border-black-200 px-4 py-2">
-                        <input type="text" class="w-full px-2 py-1 border border-black-300 rounded focus:outline-none focus:ring-2 focus:ring-[#D4AF37]" 
-                            value="${item.catatan}" 
-                            data-field="catatan" 
-                            data-id="${item.id}"
-                            data-row-index="${index}"
-                            data-col="8"
-                            onkeydown="handleTabKey(event, ${item.id}, 'catatan', ${index})">
-                    </td>
-                    <td class="border border-black-200 px-4 py-2 text-center">
-                        <button onclick="deleteRow(${item.id})" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm font-semibold">🗑️ Hapus</button>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-
-        // Handle Tab/Enter Key Navigation
-        function handleTabKey(event, id, field, rowIndex) {
-            if (event.key === 'Enter') {
-                event.preventDefault();
-                
-                // Update data terlebih dahulu
-                const input = event.target;
-                updateData(id, field, input.value);
-
-                // Daftar kolom
-                const columns = ['namaSantri', 'halaqah', 'targetJuz', 'realisasiJuz', 'murajaah', 'adab', 'kehadiran', 'status', 'catatan'];
-                const currentColIndex = columns.indexOf(field);
-                const nextColIndex = currentColIndex + 1;
-
-                if (nextColIndex < columns.length) {
-                    // Pindah ke kolom berikutnya di baris yang sama
-                    const nextInput = document.querySelector(`input[data-row-index="${rowIndex}"][data-field="${columns[nextColIndex]}"], select[data-row-index="${rowIndex}"][data-field="${columns[nextColIndex]}"]`);
-                    if (nextInput) {
-                        setTimeout(() => nextInput.focus(), 50);
-                    }
-                } else {
-                    // Pindah ke baris berikutnya, kolom pertama
-                    const nextRow = rowIndex + 1;
-                    if (nextRow < dataStorage.length) {
-                        const nextItem = dataStorage[nextRow];
-                        const firstInputNextRow = document.querySelector(`input[data-row-index="${nextRow}"][data-field="namaSantri"]`);
-                        if (firstInputNextRow) {
-                            setTimeout(() => firstInputNextRow.focus(), 50);
-                        }
-                    }
+        async function ensurePasswordInitialized() {
+            const raw = localStorage.getItem(STORAGE_PW);
+            if (!raw) {
+                const salt = generateSalt();
+                const hash = await pbkdf2Hash(DEFAULT_PW, salt);
+                localStorage.setItem(STORAGE_PW, JSON.stringify({ salt, hash, iterations: 100000 }));
+                return;
+            }
+            try {
+                const obj = JSON.parse(raw);
+                if (!obj.salt || !obj.hash) {
+                    throw new Error('legacy');
                 }
+            } catch (e) {
+                // legacy plaintext -> convert
+                const salt = generateSalt();
+                const hash = await pbkdf2Hash(raw, salt);
+                localStorage.setItem(STORAGE_PW, JSON.stringify({ salt, hash, iterations: 100000 }));
             }
         }
 
-        // Update Data
-        function updateData(id, field, value) {
-            const item = dataStorage.find(d => d.id === id);
-            if (item) {
-                if (['targetJuz', 'realisasiJuz', 'murajaah', 'adab', 'kehadiran'].includes(field)) {
-                    item[field] = parseFloat(value) || 0;
-                } else {
-                    item[field] = value;
-                }
-            }
+        async function verifyPassword(entered) {
+            const raw = localStorage.getItem(STORAGE_PW);
+            if (!raw) return false;
+            let obj;
+            try { obj = JSON.parse(raw); } catch { return false; }
+            const { salt, iterations } = obj;
+            const hash = await pbkdf2Hash(entered, salt, iterations || 100000);
+            return hash === obj.hash;
         }
 
-        // Add New Row
-        function addNewRow() {
-            const newId = dataStorage.length > 0 ? Math.max(...dataStorage.map(d => d.id)) + 1 : 1;
-            const newRow = {
-                id: newId,
-                namaSantri: '',
-                halaqah: 'Halaqah A',
-                targetJuz: 0,
-                realisasiJuz: 0,
-                murajaah: 0,
-                adab: 0,
-                kehadiran: 0,
-                status: 'On Track',
-                catatan: ''
+        // Initialize password storage (convert legacy if needed)
+        ensurePasswordInitialized();
+
+        // auth UI handlers
+        startAuthBtn.addEventListener('click', function() {
+            authSection.classList.remove('hidden');
+            authSection.style.display = 'block';
+            const pwdInput = document.getElementById('authPassword');
+            if (pwdInput) pwdInput.focus();
+        });
+
+        // Ensure drop zone & upload button hidden until authenticated (explicit style fallback)
+        if (dropZone) dropZone.style.display = 'none';
+        if (uploadButton) uploadButton.style.display = 'none';
+
+        uploadButton.addEventListener('click', function() {
+            if (isAuthenticated) fileInput.click();
+        });
+
+        deleteDataBtn.addEventListener('click', function() {
+            if (isAuthenticated) clearSavedData();
+        });
+
+        // Drag & drop handlers
+        function handleFiles(files) {
+            if (!files || files.length === 0) return;
+            const file = files[0];
+            fileNameLabel.textContent = "File terpilih: " + file.name;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, { type: 'array', cellNF: true, cellText: true });
+                const firstSheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[firstSheetName];
+                const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, raw: false, defval: '' });
+                saveDataToStorage(jsonData, file.name);
+                renderTable(jsonData, file.name);
             };
-            dataStorage.push(newRow);
-            renderInputMode();
+            reader.readAsArrayBuffer(file);
         }
 
-        // Delete Row
-        function deleteRow(id) {
-            if (confirm('Apakah Anda yakin ingin menghapus data ini?')) {
-                dataStorage = dataStorage.filter(d => d.id !== id);
-                renderInputMode();
-                saveToLocalStorage();
+        dropZone.addEventListener('dragover', function(e) { e.preventDefault(); dropZone.classList.add('bg-slate-900'); });
+        dropZone.addEventListener('dragleave', function(e) { e.preventDefault(); dropZone.classList.remove('bg-slate-900'); });
+        dropZone.addEventListener('drop', function(e) {
+            e.preventDefault(); dropZone.classList.remove('bg-slate-900');
+            if (!isAuthenticated) return; // only accept when authed
+            const dt = e.dataTransfer; if (!dt) return; handleFiles(dt.files);
+        });
+
+        fileInput.addEventListener('change', function(e) { handleFiles(e.target.files); });
+
+        // auth binding
+        function bindAuthLogin() {
+            const authPassword = document.getElementById('authPassword');
+            const authSubmitBtn = document.getElementById('authSubmitBtn');
+            if (!authSubmitBtn || !authPassword) return;
+            authSubmitBtn.addEventListener('click', async function() { await validatePassword(); });
+            authPassword.addEventListener('keydown', async function(e) { if (e.key === 'Enter') await validatePassword(); });
+            // when input clicked while locked, animate shake
+            authPassword.addEventListener('click', function() {
+                const failState = readFailState();
+                if (failState.lockUntil && Date.now() < failState.lockUntil) {
+                    // trigger shake animation
+                    authPassword.classList.remove('shake');
+                    // force reflow
+                    void authPassword.offsetWidth;
+                    authPassword.classList.add('shake');
+                }
+            });
+        }
+
+        bindAuthLogin();
+
+        async function validatePassword() {
+            const authPassword = document.getElementById('authPassword');
+            const authMessage = document.getElementById('authMessage');
+            const entered = (authPassword && authPassword.value) ? authPassword.value : '';
+
+            // check lock state
+            const failState = readFailState();
+            const now = Date.now();
+            if (failState.lockUntil && now < failState.lockUntil) {
+                startLockCountdown();
+                return;
             }
-        }
 
-        // Save All Data
-        function saveAllData() {
-            saveToLocalStorage();
-            alert('✓ Data berhasil disimpan!');
-            isAuthenticated = false;
-            document.getElementById('inputMode').classList.add('hidden');
-            document.getElementById('displayMode').classList.remove('hidden');
-            renderDisplayMode();
-        }
-
-        // Save to LocalStorage
-        function saveToLocalStorage() {
-            localStorage.setItem('santriData', JSON.stringify(dataStorage));
-        }
-
-        // Open Password Modal
-        function openPasswordModal() {
-            document.getElementById('passwordModal').classList.remove('hidden');
-            document.getElementById('passwordInput').focus();
-            document.getElementById('passwordError').classList.add('hidden');
-        }
-
-        // Close Password Modal
-        function closePasswordModal() {
-            document.getElementById('passwordModal').classList.add('hidden');
-            document.getElementById('passwordInput').value = '';
-            document.getElementById('passwordError').classList.add('hidden');
-        }
-
-        // Close Input Mode (Batal)
-        function closeInputMode() {
-            if (confirm('Data yang belum disimpan akan hilang. Lanjutkan?')) {
-                isAuthenticated = false;
-                document.getElementById('inputMode').classList.add('hidden');
-                document.getElementById('displayMode').classList.remove('hidden');
-                document.getElementById('passwordInput').value = '';
-                document.getElementById('passwordError').classList.add('hidden');
-                // Reload data dari localStorage (abaikan perubahan)
-                dataStorage = JSON.parse(localStorage.getItem('santriData')) || sampleData;
-                renderDisplayMode();
-            }
-        }
-
-        // Check Password
-        function checkPassword() {
-            const passwordInput = document.getElementById('passwordInput').value;
-            const errorMsg = document.getElementById('passwordError');
-
-            if (passwordInput === PASSWORD) {
+            await ensurePasswordInitialized();
+            const ok = await verifyPassword(entered);
+            if (ok) {
+                // reset fail state
+                writeFailState({ count: 0, lockUntil: 0 });
                 isAuthenticated = true;
-                document.getElementById('passwordModal').classList.add('hidden');
-                document.getElementById('displayMode').classList.add('hidden');
-                document.getElementById('inputMode').classList.remove('hidden');
-                errorMsg.classList.add('hidden');
-                renderInputMode();
+                authMessage.textContent = 'Password diterima. Anda bisa mengunggah atau menghapus data.';
+                authMessage.className = 'text-xs mt-3 font-semibold';
+                authMessage.style.color = '#a3e635';
+                if (authPassword) authPassword.value = '';
+                onAuthenticated();
             } else {
-                errorMsg.classList.remove('hidden');
-                document.getElementById('passwordInput').value = '';
-                document.getElementById('passwordInput').focus();
+                // increment fail
+                failState.count = (failState.count || 0) + 1;
+                if (failState.count >= 8) {
+                    // lock for LOCK_DURATION_MS
+                    failState.lockUntil = Date.now() + LOCK_DURATION_MS;
+                    authMessage.textContent = `Terlalu banyak percobaan salah — dikunci selama ${Math.round(LOCK_DURATION_MS/60000)} menit.`;
+                    authMessage.className = 'text-xs mt-3 font-semibold';
+                    authMessage.style.color = '#f87171';
+                    startLockCountdown();
+                } else {
+                    const remaining = 8 - failState.count;
+                    authMessage.textContent = `Password salah. Sisa ${remaining} percobaan sebelum terkunci selama 2 menit.`;
+                    authMessage.className = 'text-xs mt-3 font-semibold';
+                    authMessage.style.color = '#f87171';
+                }
+                writeFailState(failState);
+                if (authPassword) authPassword.focus();
             }
         }
 
-        // Allow Enter key to submit password
-        document.getElementById('passwordInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                checkPassword();
+        let lockIntervalId = null;
+
+        function startLockCountdown() {
+            // avoid multiple intervals
+            if (lockIntervalId) return;
+            const failState = readFailState();
+            if (!failState.lockUntil || Date.now() >= failState.lockUntil) {
+                // no lock
+                writeFailState({ count: 0, lockUntil: 0 });
+                renderAuthLoginForm();
+                return;
             }
+            function update() {
+                const authMessage = document.getElementById('authMessage');
+                const now = Date.now();
+                const remainingMs = failState.lockUntil - now;
+                if (remainingMs <= 0) {
+                    clearInterval(lockIntervalId);
+                    lockIntervalId = null;
+                    writeFailState({ count: 0, lockUntil: 0 });
+                    authMessage.textContent = 'Kunci berakhir. Silakan coba lagi.';
+                    authMessage.className = 'text-xs mt-3 font-semibold';
+                    authMessage.style.color = '#a3e635';
+                    renderAuthLoginForm();
+                    return;
+                }
+                const remaining = Math.ceil(remainingMs / 1000);
+                authMessage.textContent = `Terkunci karena percobaan salah. Coba lagi dalam ${remaining} detik.`;
+                authMessage.className = 'text-xs mt-3 text-red-400';
+            }
+            update();
+            lockIntervalId = setInterval(update, 1000);
+        }
+
+        function onAuthenticated() {
+            uploadButton.classList.remove('hidden');
+            deleteDataBtn.classList.remove('hidden');
+            if (authInfoParagraph) authInfoParagraph.classList.remove('hidden');
+            startAuthBtn.classList.add('hidden');
+            if (dropZone) { dropZone.classList.remove('hidden'); dropZone.style.display = 'block'; }
+            if (uploadButton) { uploadButton.classList.remove('hidden'); uploadButton.style.display = 'inline-block'; }
+            authSection.classList.add('hidden');
+            authSection.style.display = 'none';
+
+            if (logoutBtn) {
+                logoutBtn.classList.remove('hidden');
+            }
+        
+            if (logoutBtn) {
+                logoutBtn.onclick = function() {
+                    isAuthenticated = false;
+                    sessionStorage.removeItem('dataSantriSessionAuth');
+                    uploadButton.classList.add('hidden');
+                    deleteDataBtn.classList.add('hidden');
+                    if (authInfoParagraph) authInfoParagraph.classList.add('hidden');
+                    changePwSection.classList.add('hidden');
+                    newPasswordInput.value = '';
+                    confirmPasswordInput.value = '';
+                    startAuthBtn.classList.remove('hidden');
+                    logoutBtn.classList.add('hidden');
+                    if (dropZone) { dropZone.classList.add('hidden'); dropZone.style.display = 'none'; }
+                    if (uploadButton) uploadButton.style.display = 'none';
+                    authSection.style.display = 'none';
+                    renderAuthLoginForm();
+                }
+            }
+        }
+
+        function renderAuthLoginForm() {
+            authSection.innerHTML = `
+                <p class="text-sm text-slate-300 mb-3">Masukkan password untuk mengeditdata.</p>
+                <div class="flex flex-col gap-3 sm:flex-row">
+                    <input id="authPassword" type="password" placeholder="Password" class="w-full rounded-2xl border border-slate-600 bg-slate-900 px-4 py-3 text-slate-100 focus:border-[#1e4680] focus:outline-none" />
+                    <button id="authSubmitBtn" type="button" class="rounded-2xl bg-[#1e4680] text-white font-semibold px-5 py-3 hover:bg-[#163c6b] transition">Verifikasi</button>
+                </div>
+                <p id="authMessage" class="text-xs mt-3 text-slate-400"></p>
+            `;
+            bindAuthLogin();
+            // if locked when rendering form, start countdown
+            const failState = readFailState();
+            if (failState.lockUntil && Date.now() < failState.lockUntil) startLockCountdown();
+        }
+
+        function saveDataToStorage(data, fileName) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            localStorage.setItem(STORAGE_NAME, fileName);
+            const now = new Date().toISOString();
+            localStorage.setItem(STORAGE_DATE, now);
+            if (uploadDateEl) uploadDateEl.textContent = 'Tanggal upload: ' + new Date(now).toLocaleString();
+        }
+
+        function loadSavedData() {
+            const storedData = localStorage.getItem(STORAGE_KEY);
+            const storedName = localStorage.getItem(STORAGE_NAME);
+            const storedDate = localStorage.getItem(STORAGE_DATE);
+            if (storedDate && uploadDateEl) {
+                uploadDateEl.textContent = 'Tanggal upload: ' + new Date(storedDate).toLocaleString();
+            }
+            if (storedData) {
+                try {
+                    const parsedData = JSON.parse(storedData);
+                    renderTable(parsedData, storedName || 'Data tersimpan');
+                } catch (err) {
+                    localStorage.removeItem(STORAGE_KEY);
+                    localStorage.removeItem(STORAGE_NAME);
+                    localStorage.removeItem(STORAGE_DATE);
+                }
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', loadSavedData);
+
+        // On load, if locked, start countdown and ensure dropZone hidden
+        window.addEventListener('DOMContentLoaded', function() {
+            const failState = readFailState();
+            if (failState.lockUntil && Date.now() < failState.lockUntil) startLockCountdown();
+            if (dropZone) dropZone.classList.add('hidden');
         });
 
-        // Initialize
-        window.addEventListener('DOMContentLoaded', function() {
-            renderDisplayMode();
-        });
+        function clearSavedData() {
+            localStorage.removeItem(STORAGE_KEY);
+            localStorage.removeItem(STORAGE_NAME);
+            localStorage.removeItem(STORAGE_DATE);
+            fileInput.value = '';
+            fileNameLabel.textContent = 'Format yang didukung: .xlsx, .xls, .csv';
+            const tableHead = document.getElementById('tableHead');
+            const tableBody = document.getElementById('tableBody');
+            const rowCount = document.getElementById('rowCount');
+            tableHead.innerHTML = '<tr><th class="px-6 py-4 font-semibold text-left border-b border-[#163c6b] bg-[#1e4680] text-white">Silakan upload file Excel atau CSV</th></tr>';
+            tableBody.innerHTML = '<tr><td class="px-6 py-8 text-center text-slate-400 italic">Belum ada data. Silakan upload file Excel atau CSV terlebih dahulu.</td></tr>';
+            rowCount.textContent = '0 baris data dimuat';
+            if (uploadDateEl) uploadDateEl.textContent = 'Tanggal upload: -';
+            renderAuthLoginForm();
+            const msg = document.getElementById('authMessage');
+            if (msg) {
+                msg.textContent = 'Data berhasil dihapus.';
+                msg.className = 'text-xs mt-3 text-emerald-400';
+            }
+        }
+
+        function renderTable(data, fileName) {
+            const tableHead = document.getElementById('tableHead');
+            const tableBody = document.getElementById('tableBody');
+            const rowCount = document.getElementById('rowCount');
+
+            tableHead.innerHTML = '';
+            tableBody.innerHTML = '';
+
+            if (fileName) {
+                fileNameLabel.textContent = 'File tersimpan: ' + fileName;
+            }
+
+            if (!data || data.length === 0) {
+                tableBody.innerHTML = '<tr><td class="px-6 py-8 text-center text-slate-400 italic">File kosong atau tidak dapat dibaca.</td></tr>';
+                rowCount.textContent = '0 baris data dimuat';
+                return;
+            }
+
+            const headers = data[0] || [];
+            let maxHeaderIndex = -1;
+
+            for (let rowIndex = 0; rowIndex < data.length; rowIndex++) {
+                const row = data[rowIndex] || [];
+                for (let j = 0; j < row.length; j++) {
+                    const value = row[j];
+                    if (value !== undefined && value !== null && String(value).trim() !== '') {
+                        maxHeaderIndex = Math.max(maxHeaderIndex, j);
+                    }
+                }
+            }
+            const visibleHeaders = headers.slice(0, maxHeaderIndex + 1);
+
+            const headerRow = document.createElement('tr');
+            visibleHeaders.forEach(headerText => {
+                const th = document.createElement('th');
+                th.className = 'px-6 py-4 font-semibold text-white border-b border-[#163c6b] bg-[#1e4680]';
+                th.textContent = headerText !== undefined ? headerText : '';
+                headerRow.appendChild(th);
+            });
+            tableHead.appendChild(headerRow);
+
+            let rowsAdded = 0;
+            for (let i = 1; i < data.length; i++) {
+                const rowData = data[i] || [];
+                if (rowData.length === 0) continue;
+
+                let lastFilledIndex = -1;
+                for (let j = 0; j < Math.min(rowData.length, visibleHeaders.length); j++) {
+                    const value = rowData[j];
+                    if (value !== undefined && value !== null && String(value).trim() !== '') {
+                        lastFilledIndex = j;
+                    }
+                }
+                if (lastFilledIndex < 0) continue;
+
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-slate-200 transition-colors duration-150';
+
+                for (let colIndex = 0; colIndex <= lastFilledIndex; colIndex++) {
+                    const td = document.createElement('td');
+                    td.className = 'px-6 py-4 break-words text-slate-700';
+                    const cellValue = rowData[colIndex];
+                    const headerName = visibleHeaders[colIndex] || '';
+
+                    if (cellValue !== undefined && cellValue !== null && String(cellValue).trim() !== '') {
+                        const cellStr = String(cellValue).trim();
+                        const isHeaderPercent = String(headerName).toLowerCase().includes('persen') || String(headerName).includes('%');
+
+                        if (cellStr.includes('%')) {
+                            td.textContent = cellStr;
+                        } else if (isHeaderPercent) {
+                            const numValue = Number(cellValue);
+                            if (!isNaN(numValue)) {
+                                let percentage = numValue;
+                                if (percentage >= 0 && percentage <= 1) {
+                                    percentage = percentage * 100;
+                                }
+                                td.textContent = parseFloat(percentage.toFixed(2)) + '%';
+                            } else {
+                                td.textContent = cellStr;
+                            }
+                        } else {
+                            const numValue = Number(cellValue);
+                            if (!isNaN(numValue) && numValue > 0 && numValue < 1) {
+                                td.textContent = parseFloat((numValue * 100).toFixed(2)) + '%';
+                            } else {
+                                td.textContent = cellStr;
+                            }
+                        }
+                    } else {
+                        td.textContent = '';
+                    }
+
+                    tr.appendChild(td);
+                }
+
+                tableBody.appendChild(tr);
+                rowsAdded++;
+            }
+
+            rowCount.textContent = `${rowsAdded} baris data dimuat`;
+        }
     </script>
 </body>
 

@@ -3,156 +3,154 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <script src="https://cdn.tailwindcss.com"></script>
+        <link rel="stylesheet" href="styles.css">
         <title>Jadwal Harian - PTQ Dzu Nurain</title>
         <style>
-            @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;600&display=swap');
-
-            body {
-                font-family: 'Inter', sans-serif;
+        @keyframes slideFromLine {
+            0% {
+                opacity: 0;
+                transform: translateX(-100%);
             }
-
-            .font-serif {
-                font-family: 'Playfair Display', serif;
+            100% {
+                opacity: 1;
+                transform: translateX(0);
             }
+        }
 
-            /* Custom scrollbar untuk tema gelap */
-            ::-webkit-scrollbar {
-                width: 8px;
-            }
-
-            ::-webkit-scrollbar-track {
-                background: #0f172a;
-            }
-
-            ::-webkit-scrollbar-thumb {
-                background: #D4AF37;
-                border-radius: 10px;
-            }
+        .animate-text-reveal {
+            animation: slideFromLine 2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
         </style>
     </head>
 
     <body class="bg-gradient-to-b from-gray-100 to-gray-200 text-gray-800 pb-28">
 
-        <main class="max-w-5xl mx-auto py-12 px-6">
-            <nav class="fixed bottom-0 left-0 right-0 z-50 bg-gray-900 text-gray-200 border-t border-gray-800">
-                <div class="max-w-6xl mx-auto px-4">
-                    <ul class="flex justify-between items-center">
-                        <li class="flex-1 text-center">
-                            <a href="index.html" class="flex flex-col items-center justify-center py-3">
-                                <span class="text-2xl">🏠</span>
-                                <span class="text-[11px] mt-1">Beranda</span>
-                            </a>
-                        </li>
-                        <li class="flex-1 text-center">
-                            <a href="program.html" class="flex flex-col items-center justify-center py-3">
-                                <span class="text-2xl">🎓</span>
-                                <span class="text-[11px] mt-1">Program</span>
-                            </a>
-                        </li>
-                        <li class="flex-1 text-center">
-                            <a href="#" class="flex flex-col items-center justify-center py-3">
-                                <span class="text-2xl">🕘</span>
-                                <span class="text-[11px] mt-1">Jadwal</span>
-                            </a>
-                        </li>
-                        <li class="flex-1 text-center">
-                            <a href="agenda.html" class="flex flex-col items-center justify-center py-3">
-                                <span class="text-2xl">🗓️</span>
-                                <span class="text-[11px] mt-1">Agenda</span>
-                            </a>
-                        </li>
-                        <li class="flex-1 text-center">
-                            <a href="data_santri.html" class="flex flex-col items-center justify-center py-3">
-                                <span class="text-2xl">👥</span>
-                                <span class="text-[11px] mt-1">Data</span>
-                            </a>
-                        </li>
-                    </ul>
+        <main class="max-w-5xl mx-auto py-1 px-6">
+            <nav class="fixed bottom-0 left-0 right-0 z-50 bg-gradient-to-b from-[#1e4680] to-[#111827] text-gray-100 border-t border-gray-800">
+                <div class="max-w-6xl mx-auto px-4 flex justify-between items-center">
+                    <a href="index.html" class="flex-1 text-center flex flex-col items-center justify-center py-3">
+                        <span class="text-2xl">🏠</span>
+                        <span class="text-[11px] mt-1">Beranda</span>
+                    </a>
+
+                    <a href="program.html" class="flex-1 text-center flex flex-col items-center justify-center py-3">
+                        <span class="text-2xl">🎓</span>
+                        <span class="text-[11px] mt-1">Program</span>
+                    </a>
+
+                    <a href="jadwal.html" class="flex-1 text-center flex flex-col items-center justify-center py-3">
+                        <span class="text-2xl">🕘</span>
+                        <span class="text-[11px] mt-1">Jadwal</span>
+                    </a>
+
+                    <a href="agenda.html" class="flex-1 text-center flex flex-col items-center justify-center py-3">
+                        <span class="text-2xl">🗓️</span>
+                        <span class="text-[11px] mt-1">Agenda</span>
+                    </a>
+
+                    <a href="data_santri.html" class="flex-1 text-center flex flex-col items-center justify-center py-3">
+                        <span class="text-2xl">👥</span>
+                        <span class="text-[11px] mt-1">Data</span>
+                    </a>
                 </div>
             </nav>
-                <div class="mb-10">
-                <h2 class="text-3xl md:text-4xl font-serif font-bold text-gray-800 mb-2 uppercase">Rutinitas
-                    <span class="text-[#1e4680]">Harian</span>
-                </h2>
-                <p class="text-gray-600 text-sm">Membentuk karakter disiplin dan spiritual melalui jadwal yang
-                    terstruktur dari bangun tidur hingga istirahat kembali.</p>
+            <div class="border-l-4 border-[#D4AF37] pl-4 my-6 overflow-hidden">
+                <div class="animate-text-reveal">
+                    <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold font-serif text-slate-800 leading-tight">
+                        Rutinitas <span class="text-[#1e4680]">Harian</span>
+                    </h1>
+                    <p class="text-xs sm:text-sm lg:text-base text-slate-600 mt-1.5 sm:mt-2 max-w-2xl leading-relaxed">
+                        Membentuk karakter disiplin dan spiritual melalui jadwal yang terstruktur dari bangun tidur hingga istirahat kembali.
+                    </p>
+                </div>
             </div>
-
-            <div
-                class="bg-white rounded-2xl overflow-hidden border border-gray-400 shadow-[0_20px_50px_rgba(0,0,0,0.1)]">
+            <div class="bg-white rounded-2xl overflow-hidden border border-gray-400 shadow-[0_20px_50px_rgba(0,0,0,0.1)]">
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
                         <thead>
                             <tr class="bg-[#1e4680] border-b border-gray-400">
-                                <th class="p-5 text-white uppercase text-xs tracking-widest font-bold">Waktu</th>
-                                <th class="p-5 text-white uppercase text-xs tracking-widest font-bold">Kegiatan</th>
-                                <th class="p-5 text-white uppercase text-xs tracking-widest font-bold">Fokus</th>
-                                <th class="p-5 text-white uppercase text-xs tracking-widest font-bold font-light">
-                                    Keterangan</th>
+                                <th class="p-5 text-white uppercase text-xs tracking-widest font-bold text-center">Waktu</th>
+                                <th class="p-5 text-white uppercase text-xs tracking-widest font-bold text-center">Kegiatan</th>
+                                <th class="p-5 text-white uppercase text-xs tracking-widest font-bold text-center">Fokus</th>
+                                <th class="p-5 text-white uppercase text-xs tracking-widest font-bold text-center">Keterangan</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-300">
-                            <tr class="hover:bg-gray-50 transition">
-                                <td class="p-5 text-sm font-mono text-[#1e4680]">04:00 - 05:45</td>
-                                <td class="p-5 font-semibold text-gray-800">Qiyamul Lail & Subuh</td>
-                                <td class="p-5"><span
-                                        class="bg-blue-100 text-[#1e4680] text-[10px] px-2 py-1 rounded uppercase font-bold">Ibadah</span>
-                                </td>
-                                <td class="p-5 text-sm text-gray-600">Shalat malam, dzikir, dan jamaah</td>
-                            </tr>
                             <tr class="hover:bg-gray-50 transition bg-gray-100">
-                                <td class="p-5 text-sm font-mono text-[#1e4680]">05:45 - 06:45</td>
-                                <td class="p-5 font-semibold text-gray-800">Setoran Hafalan</td>
+                                <td class="p-5 text-sm font-mono text-[#1e4680] text-center">03:00 sampai 03:29</td>
+                                <td class="p-5 font-semibold text-gray-800 text-center">Persiapan Halaqah Dinihari</td>
                                 <td class="p-5"><span
-                                        class="bg-amber-100 text-[#D4AF37] text-[10px] px-2 py-1 rounded uppercase font-bold">Tahfidz</span>
+                                        class="bg-amber-100 text-[#D4AF37] text-[10px] px-2 py-1 rounded uppercase font-bold">PERSIAPAN</span>
                                 </td>
-                                <td class="p-5 text-sm text-gray-600">Ziyadah harian bersama Musyrif</td>
+                                <td class="p-5 text-xs text-gray-600">Bangun Tidur, Persiapan Halaqah Dinihari</td>
                             </tr>
                             <tr class="hover:bg-gray-50 transition">
-                                <td class="p-5 text-sm font-mono text-[#1e4680]">07:30 - 11:30</td>
-                                <td class="p-5 font-semibold text-gray-800">KBM / Pelajaran</td>
+                                <td class="p-5 text-sm font-mono text-[#1e4680] text-center">03:30 sampai Subuh</td>
+                                <td class="p-5 font-semibold text-gray-800 text-center">Halaqah Dinihari</td>
                                 <td class="p-5"><span
-                                        class="bg-green-100 text-[#1e4680] text-[10px] px-2 py-1 rounded uppercase font-bold">Akademik</span>
+                                        class="bg-blue-100 text-[#1e4680] text-[10px] px-2 py-1 rounded uppercase font-bold">MURAJAAH</span>
                                 </td>
-                                <td class="p-5 text-sm text-gray-600">Pelajaran umum dan diniyah</td>
+                                <td class="p-5 text-xs text-gray-600">Mengulang 5 lembar hafalan yang sudah di hafal lalu di setor</td>
                             </tr>
                             <tr class="hover:bg-gray-50 transition bg-gray-100">
-                                <td class="p-5 text-sm font-mono text-[#1e4680]">11:30 - 14:30</td>
-                                <td class="p-5 font-semibold text-gray-800">Istirahat & Murojaah</td>
+                                <td class="p-5 text-sm font-mono text-[#1e4680] text-center"> Ba'da subuh sampai 07:00</td>
+                                <td class="p-5 font-semibold text-gray-800 text-center">Halaqah subuh</td>
                                 <td class="p-5"><span
-                                        class="bg-blue-100 text-[#1e4680] text-[10px] px-2 py-1 rounded uppercase font-bold">Ibadah</span>
+                                        class="bg-blue-100 text-[#1e4680] text-[10px] px-2 py-1 rounded uppercase font-bold">Murajaah</span>
                                 </td>
-                                <td class="p-5 text-sm text-gray-600">Dzuhur, makan, dan penguatan hafalan</td>
+                                <td class="p-5 text-xs text-gray-600">Mengulang Juz yang sedang di hafal (sabqy)</td>
                             </tr>
                             <tr class="hover:bg-gray-50 transition">
-                                <td class="p-5 text-sm font-mono text-[#1e4680]">14:30 - 17:00</td>
-                                <td class="p-5 font-semibold text-gray-800">Olahraga & Belajar Sore</td>
+                                <td class="p-5 text-sm font-mono text-[#1e4680] text-center"> 07:00 sampai 08:59</td>
+                                <td class="p-5 font-semibold text-gray-800 text-center">Persiapan Diri</td>
                                 <td class="p-5"><span
-                                        class="bg-red-100 text-[#1e4680] text-[10px] px-2 py-1 rounded uppercase font-bold">Kesehatan</span>
+                                        class="bg-amber-100 text-[#D4AF37] text-[10px] px-2 py-1 rounded uppercase font-bold">Persiapan</span>
                                 </td>
-                                <td class="p-5 text-sm text-gray-600">Olahraga terjadwal dan tugas mandiri</td>
+                                <td class="p-5 text-xs text-gray-600">Makan, Mandi, Mencuci, Merapikan Barang-Barang, Dan Persiapan Halaqah pagi</td>
                             </tr>
                             <tr class="hover:bg-gray-50 transition bg-gray-100">
-                                <td class="p-5 text-sm font-mono text-[#1e4680]">18:00 - 20:00</td>
-                                <td class="p-5 font-semibold text-gray-800">Halaqah Maghrib & Isya</td>
-                                <td class="p-5"><span
-                                        class="bg-amber-100 text-[#D4AF37] text-[10px] px-2 py-1 rounded uppercase font-bold">Tahfidz</span>
+                                <td class="p-5 text-sm font-mono text-[#1e4680] text-center">09:00 sampai 11:00</td>
+                                <td class="p-5 font-semibold text-gray-800 text-center">Halaqah Pagi</td>
+                                <td class="p-5 text-center"><span
+                                        class="bg-red-100 text-[#1e4680] text-[10px] px-2 py-1 rounded uppercase font-bold">Tahfidz</span>
                                 </td>
-                                <td class="p-5 text-sm text-gray-600">Tilawah dan materi akhlak/fiqih</td>
+                                <td class="p-5 text-xs text-gray-600">Menambah Hafalan Baru</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50 transition">
+                                <td class="p-5 text-sm font-mono text-[#1e4680] text-center">11:00 sampai shalat ashar</td>
+                                <td class="p-5 font-semibold text-gray-800 text-center">Istirahat</td>
+                                <td class="p-5"><span
+                                        class="bg-green-100 text-[#1e4680] text-[10px] px-2 py-1 rounded uppercase font-bold">Istirahat</span>
+                                </td>
+                                <td class="p-5 text-xs text-gray-600">Tidur, Kegiatan Bebas Bermanfaat</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50 transition bg-gray-100">
+                                <td class="p-5 text-sm font-mono text-[#1e4680] text-center">Ba'da Ashar sampai 17:00</td>
+                                <td class="p-5 font-semibold text-gray-800 text-center">Halaqah Sore</td>
+                                <td class="p-5  text-center"><span
+                                        class="bg-red-100 text-[#1e4680] text-[10px] px-2 py-1 rounded uppercase font-bold">Tahfidz</span>
+                                </td>
+                                <td class="p-5 text-xs text-gray-600">Memperlancar Hafalan Baru Yang Baru di Hafal Hari Ini</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50 transition">
+                                <td class="p-5 text-sm font-mono text-[#1e4680] text-center">17:00 sampai Maghrib</td>
+                                <td class="p-5 font-semibold text-gray-800 text-center">Eskul, Persiapan Shalat Maghrib</td>
+                                <td class="p-5"><span
+                                        class="bg-green-100 text-[#1e4680] text-[10px] px-2 py-1 rounded uppercase font-bold">Istirahat</span>
+                                </td>
+                                <td class="p-5 text-xs text-gray-600">Mandi, Persiapan shalat Maghrib</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50 transition bg-gray-100">
+                                <td class="p-5 text-sm font-mono text-[#1e4680] text-center">Ba'da Isya sampai 20:00</td>
+                                <td class="p-5 font-semibold text-gray-800 text-center">Halaqah Malam</td>
+                                <td class="p-5"><span
+                                        class="bg-amber-100 text-[#D4AF37] text-[10px] px-2 py-1 rounded uppercase font-bold">Murajaah</span>
+                                </td>
+                                <td class="p-5 text-xs text-gray-600">Mempersiapkan setoran untuk Halaqah dinihari</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-            </div>
-
-            <div class="mt-8 flex items-center space-x-2 text-xs text-gray-600 italic">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-[#1e4680]" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <span>Jadwal dapat berubah sewaktu-waktu sesuai kebijakan pengasuh pondok.</span>
             </div>
         </main>
     </body>

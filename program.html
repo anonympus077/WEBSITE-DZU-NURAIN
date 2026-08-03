@@ -4,103 +4,118 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="../css/responsive.css">
     <title>Program Tahfidz - Dzu Nurain</title>
+
+    <!-- Animasi Kustom untuk Teks Keluar dari Garis -->
+    <style>
+        @keyframes slideFromLine {
+            0% {
+                opacity: 0;
+                transform: translateX(-100%);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .animate-text-reveal {
+            animation: slideFromLine 2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+    </style>
 </head>
 
 <body class="bg-gradient-to-b from-gray-100 to-gray-200 text-gray-800 font-sans pb-28">
 
-    <main class="max-w-7xl mx-auto py-16 px-6">
-        <nav class="fixed bottom-0 left-0 right-0 z-50 bg-gray-900 text-gray-200 border-t border-gray-800">
-            <div class="max-w-6xl mx-auto px-4">
-                <ul class="flex justify-between items-center">
-                    <li class="flex-1 text-center">
-                        <a href="index.html" class="flex flex-col items-center justify-center py-3">
-                            <span class="text-2xl">🏠</span>
-                            <span class="text-[11px] mt-1">Beranda</span>
-                        </a>
-                    </li>
-                    <li class="flex-1 text-center">
-                        <a href="#" class="flex flex-col items-center justify-center py-3">
-                            <span class="text-2xl">🎓</span>
-                            <span class="text-[11px] mt-1">Program</span>
-                        </a>
-                    </li>
-                    <li class="flex-1 text-center">
-                        <a href="jadwal.html" class="flex flex-col items-center justify-center py-3">
-                            <span class="text-2xl">🕘</span>
-                            <span class="text-[11px] mt-1">Jadwal</span>
-                        </a>
-                    </li>
-                    <li class="flex-1 text-center">
-                        <a href="agenda.html" class="flex flex-col items-center justify-center py-3">
-                            <span class="text-2xl">🗓️</span>
-                            <span class="text-[11px] mt-1">Agenda</span>
-                        </a>
-                    </li>
-                    <li class="flex-1 text-center">
-                        <a href="data_santri.html" class="flex flex-col items-center justify-center py-3">
-                            <span class="text-2xl">👥</span>
-                            <span class="text-[11px] mt-1">Data</span>
-                        </a>
-                    </li>
-                </ul>
+    <main class="max-w-7xl mx-auto py-1 px-6">
+        <nav class="fixed bottom-0 left-0 right-0 z-50 bg-gradient-to-b from-[#1e4680] to-[#111827] text-gray-100 border-t border-gray-800">
+            <div class="max-w-6xl mx-auto px-4 flex justify-between items-center">
+                <a href="index.html" class="flex-1 text-center flex flex-col items-center justify-center py-3">
+                    <span class="text-2xl">🏠</span>
+                    <span class="text-[11px] mt-1">Beranda</span>
+                </a>
+
+                <a href="program.html" class="flex-1 text-center flex flex-col items-center justify-center py-3">
+                    <span class="text-2xl">🎓</span>
+                    <span class="text-[11px] mt-1">Program</span>
+                </a>
+
+                <a href="jadwal.html" class="flex-1 text-center flex flex-col items-center justify-center py-3">
+                    <span class="text-2xl">🕘</span>
+                    <span class="text-[11px] mt-1">Jadwal</span>
+                </a>
+
+                <a href="agenda.html" class="flex-1 text-center flex flex-col items-center justify-center py-3">
+                    <span class="text-2xl">🗓️</span>
+                    <span class="text-[11px] mt-1">Agenda</span>
+                </a>
+
+                <a href="data_santri.html" class="flex-1 text-center flex flex-col items-center justify-center py-3">
+                    <span class="text-2xl">👥</span>
+                    <span class="text-[11px] mt-1">Data</span>
+                </a>
             </div>
         </nav>
-        <div class="text-center mb-12">
-            <h2 class="text-gray-800 text-4xl font-serif font-bold mb-2 uppercase tracking-tight">Kurikulum & <span
-                    class="text-[#1e4680]">Pembinaan</span></h2>
-            <p class="text-gray-600 max-w-2xl mx-auto">Sistem pendidikan tahfidz terukur untuk mencetak hafidz yang
-                mutqin, beradab, dan berwawasan akademik.</p>
+
+        <div class="border-l-4 border-[#D4AF37] pl-4 my-6 overflow-hidden">
+            <div class="animate-text-reveal">
+                <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold font-serif text-slate-800 leading-tight">
+                    Kurikulum & <span class="text-[#1e4680]">Pembinaan</span> Santri
+                </h1>
+                <p class="text-xs sm:text-sm lg:text-base text-slate-600 mt-1.5 sm:mt-2 max-w-2xl leading-relaxed">
+                    Sistem pendidikan tahfidz terukur untuk mencetak hafidz yang mutqin, beradab, dan berwawasan akademik.
+                </p>
+            </div>
         </div>
 
         <div class="overflow-x-auto rounded-xl border border-gray-400 shadow-2xl">
             <table class="w-full text-left border-collapse">
                 <thead>
                     <tr class="bg-[#1e4680] text-white uppercase text-xs tracking-widest">
-                        <th class="p-5 border-b border-gray-400">Waktu</th>
-                        <th class="p-5 border-b border-gray-400">Kegiatan</th>
-                        <th class="p-5 border-b border-gray-400">Target</th>
-                        <th class="p-5 border-b border-gray-400">Penanggung Jawab</th>
-                        <th class="p-5 border-b border-gray-400">Keterangan</th>
+                        <th class="p-5 border-b border-gray-400 text-center">Waktu</th>
+                        <th class="p-5 border-b border-gray-400 text-center">Kegiatan</th>
+                        <th class="p-5 border-b border-gray-400 text-center">Penanggung Jawab</th>
+                        <th class="p-5 border-b border-gray-400 text-center">Keterangan</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-300 bg-gray-50">
                     <tr class="hover:bg-gray-100 transition duration-300">
-                        <td class="p-5 font-bold text-[#1e4680]">Harian</td>
-                        <td class="p-5 text-gray-800 font-medium">Setoran Hafalan</td>
-                        <td class="p-5 text-gray-700 italic">1-2 Halaman</td>
-                        <td class="p-5 text-gray-600">Musyrif Halaqah</td>
-                        <td class="p-5 text-xs text-gray-600">Dilaksanakan setelah Subuh / pagi</td>
+                        <td class="p-5 font-bold text-[#1e4680] text-center">Harian</td>
+                        <td class="p-5 text-gray-800 font-medium text-center">Murojaah</td>
+                        <td class="p-5 text-gray-600 text-center">Santri & Musyrif</td>
+                        <td class="p-5 text-xs text-gray-600 text-center">Wajib dan dicatat</td>
                     </tr>
                     <tr class="hover:bg-gray-100 transition duration-300">
-                        <td class="p-5 font-bold text-[#1e4680]">Harian</td>
-                        <td class="p-5 text-gray-800 font-medium">Murojaah</td>
-                        <td class="p-5 text-gray-700 italic">Minimal 1 Juz</td>
-                        <td class="p-5 text-gray-600">Santri & Musyrif</td>
-                        <td class="p-5 text-xs text-gray-600">Wajib dan dicatat</td>
+                        <td class="p-5 font-bold text-[#1e4680] text-center">Harian</td>
+                        <td class="p-5 text-gray-800 font-medium text-center">Setoran Hafalan</td>
+                        <td class="p-5 text-gray-600 text-center">Musyrif Halaqah</td>
+                        <td class="p-5 text-xs text-gray-600 text-center">Dilaksanakan setelah Subuh / pagi</td>
                     </tr>
                     <tr class="hover:bg-gray-100 transition duration-300">
-                        <td class="p-5 font-bold text-[#1e4680]">Harian</td>
-                        <td class="p-5 text-gray-800 font-medium">Tahsin / Talaqqi</td>
-                        <td class="p-5 text-gray-700 italic">Makhraj & Tajwid</td>
-                        <td class="p-5 text-gray-600">Ustadz</td>
-                        <td class="p-5 text-xs text-gray-600">Fokus kualitas bacaan</td>
+                        <td class="p-5 font-bold text-[#1e4680] text-center">Harian</td>
+                        <td class="p-5 text-gray-800 font-medium text-center">Tahsin / Talaqqi</td>
+                        <td class="p-5 text-gray-600 text-center">Ustadz</td>
+                        <td class="p-5 text-xs text-gray-600 text-center">Fokus kualitas bacaan</td>
                     </tr>
                     <tr class="hover:bg-gray-100 transition duration-300">
-                        <td class="p-5 font-bold text-[#1e4680]">Pekanan</td>
-                        <td class="p-5 text-gray-800 font-medium text-[#D4AF37]">Tasmi' per Halaqah</td>
-                        <td class="p-5 text-gray-700 italic">1 Juz</td>
-                        <td class="p-5 text-gray-600">Koordinator Tahfidz</td>
-                        <td class="p-5 text-xs text-gray-600">Dilaksanakan terjadwal</td>
+                        <td class="p-5 font-bold text-[#1e4680] text-center">Harian</td>
+                        <td class="p-5 text-gray-800 font-medium text-center">Evaluasi</td>
+                        <td class="p-5 text-gray-600 text-center">Ustadz & Musyrif</td>
+                        <td class="p-5 text-xs text-gray-600 text-center">Mengevaluasi Tata Tertib Santri</td>
                     </tr>
                     <tr class="hover:bg-gray-100 transition duration-300">
-                        <td class="p-5 font-bold text-[#1e4680]">Bulanan</td>
-                        <td class="p-5 text-gray-800 font-medium">Ujian Hafalan</td>
-                        <td class="p-5 text-gray-700 italic">1 Juz</td>
-                        <td class="p-5 text-gray-600">Bidang Tahfidz</td>
-                        <td class="p-5 text-xs text-gray-600">Skor masuk laporan bulanan</td>
+                        <td class="p-5 font-bold text-[#1e4680] text-center">Pekanan</td>
+                        <td class="p-5 text-gray-800 font-medium text-center">Eskul Bahasa Arab</td>
+                        <td class="p-5 text-gray-600 text-center">Koordinator Tahfidz</td>
+                        <td class="p-5 text-xs text-gray-600 text-center">Dijadwalkan perkelas</td>
+                    </tr>
+                    <tr class="hover:bg-gray-100 transition duration-300">
+                        <td class="p-5 font-bold text-[#1e4680] text-center">Tahunan</td>
+                        <td class="p-5 text-gray-800 font-medium text-center">Ujian Hafalan</td>
+                        <td class="p-5 text-gray-600 text-center">Bidang Tahfidz</td>
+                        <td class="p-5 text-xs text-gray-600 text-center">Mengujiankan semua Hafalan setiap Tahunnya</td>
                     </tr>
                 </tbody>
             </table>

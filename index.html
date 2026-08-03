@@ -5,87 +5,150 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Website Saya</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
     <style>
+        /* Menghapus titik bawaan browser/library pada navbar */
+nav ul, 
+nav li {
+    list-style: none !important;
+    list-style-type: none !important;
+}
+
+nav li::before,
+nav li::after {
+    content: none !important;
+}
+        @keyframes dropBounce {
+        0% {
+            opacity: 0;
+            transform: translateY(-25px) scale(0.9);
+        }
+        60% {
+            opacity: 1;
+            transform: translateY(5px) scale(1.05);
+        }
+        80% {
+            transform: translateY(-2px) scale(0.98);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+
+    .animate-drop-bounce {
+        /* 1. Set opacity awal jadi 0 (sembunyi mutlak) */
+        opacity: 0;
+
+        /* 2. Jalankan animasi dengan delay */
+        /* Format: animation: nama-animasi durasi timing-function delay fill-mode */
+        animation: dropBounce 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 1.4s forwards;
+    }
         /* CSS Tambahan jika diperlukan */
         .custom-gradient {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
     </style>
-    <link rel="stylesheet" href="../css/responsive.css">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Cinzel:wght@700&family=Montserrat:wght@500;700&family=Archivo+Black&display=swap"
-        rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&family=Cinzel:wght@700&family=Montserrat:wght@500;700&family=Archivo+Black&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 </head>
 
 <body class="overflow-x-hidden pb-28">
-    <header
-        class="w-full bg-gradient-to-b from-gray-100 via-gray-200 to-gray-300 flex flex-col relative border-b-4 border-[#1e4680]">
+    <header class="w-full bg-gradient-to-b from-gray-100 via-gray-200 to-gray-300 flex flex-col relative border-b-4 border-[#1e4680]">
 
-        <div class="pt-12 px-4 sm:px-6 lg:px-12 flex flex-col md:flex-row items-center md:items-start gap-6 md:gap-8">
-            <img src="logo.png" alt="Logo" class="w-32 h-32 sm:w-40 sm:h-40 md:w-52 md:h-52 object-contain">
+        <!-- Wrapper Header Utama -->
+        <!-- pt-6 pb-8 (Mobile) -> md:pt-12 md:pb-14 (Laptop) -->
+        <div class="flex flex-col items-center text-center pt-6 pb-8 md:pt-12 md:pb-14 px-4 sm:px-6 bg-gradient-to-b from-gray-50 to-white relative border-b border-gray-200">
+            
+            <!-- 1. Teks Basmalah (Lebar & Ukuran Font Responsif) -->
+            <p data-aos="fade" data-aos-duration="1000" class="font-['Amiri'] text-base sm:text-lg md:text-xl text-[#1e4680] mb-2 sm:mb-3 opacity-90 tracking-wide">
+                بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ
+            </p>
 
-            <div class="text-left max-w-3xl">
-                <h1 class="text-[#D4AF37] text-3xl sm:text-4xl md:text-5xl font-bold uppercase tracking-tighter leading-tight">
-                    SELAMAT DATANG DI WEBSITE RESMI<br>
-                    PONDOK TAHFIDZ QUR'AN DZU NURAIN
-                </h1>
-                <p class="text-gray-400 text-base sm:text-lg uppercase tracking-[0.4em] mt-4 font-semibold">
-                    KOLAKA TIMUR
-                </p>
+            <!-- 2. Logo Pondok (Ukuran Menyesuaikan Device) -->
+            <div class="relative mb-3 sm:mb-4" data-aos="fade-up">
+                <!-- Efek Glow Emas di Belakang Logo -->
+                <div class="absolute inset-0 rounded-full bg-[#D4AF37]/20 blur-lg md:blur-xl"></div>
+                <!-- Ukuran Logo: HP=24 (96px), Tablet=32 (128px), Laptop=40 (160px) -->
+                <img src="Album/logo.png" alt="Logo Pondok Tahfidz" class="relative w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 object-contain drop-shadow-md">
             </div>
+
+            <!-- 3. Sub-Title Kecil -->
+            <span data-aos="fade" data-aos-duration="1000" class="text-[10px] sm:text-xs md:text-sm font-bold uppercase tracking-[0.15em] sm:tracking-[0.2em] text-gray-500 mb-1 transition-all duration-700 ease-out transform translate-y-0 opacity-100">
+                Selamat Datang di Website Resmi
+            </span>
+
+            <!-- 4. Judul Utama / Nama Pondok -->
+            <!-- Font size: HP=text-lg, Tablet=text-2xl, Laptop=text-3xl -->
+            <h1 class="font-serif text-2xl sm:text-3xl md:text-4xl font-bold text-[#1e4680] max-w-sm sm:max-w-lg md:max-w-2xl leading-tight sm:leading-snug uppercase tracking-wide my-2" data-aos="fade-up">
+                Pondok Tahfidz Qur'an <br>
+                <span class="text-[#D4AF37] drop-shadow-sm">Dzu Nurain</span>
+            </h1>
+
+            <!-- 5. Badge Lokasi (Ukuran Padding & Teks Responsif) -->
+            <div class="animate-drop-bounce mt-3 sm:mt-4 inline-flex items-center gap-1.5 sm:gap-2 px-2.5 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-[#1e4680]/10 border border-[#1e4680]/20 text-[#1e4680] text-[10px] sm:text-xs md:text-sm font-semibold tracking-wider sm:tracking-widest uppercase shadow-sm">
+                <svg class="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#D4AF37]" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
+                </svg>
+                Kolaka Timur
+            </div>
+
         </div>
 
-        <nav class="fixed bottom-0 left-0 right-0 z-50 bg-gray-900 text-gray-200 border-t border-gray-800">
-            <div class="max-w-6xl mx-auto px-4">
-                <ul class="flex justify-between items-center">
-                    <li class="flex-1 text-center">
-                        <a href="index.html" class="flex flex-col items-center justify-center py-3">
-                            <span class="text-2xl">🏠</span>
-                            <span class="text-[11px] mt-1">Beranda</span>
-                        </a>
-                    </li>
-                    <li class="flex-1 text-center">
-                        <a href="program.html" class="flex flex-col items-center justify-center py-3">
-                            <span class="text-2xl">🎓</span>
-                            <span class="text-[11px] mt-1">Program</span>
-                        </a>
-                    </li>
-                    <li class="flex-1 text-center">
-                        <a href="jadwal.html" class="flex flex-col items-center justify-center py-3">
-                            <span class="text-2xl">🕘</span>
-                            <span class="text-[11px] mt-1">Jadwal</span>
-                        </a>
-                    </li>
-                    <li class="flex-1 text-center">
-                        <a href="agenda.html" class="flex flex-col items-center justify-center py-3">
-                            <span class="text-2xl">🗓️</span>
-                            <span class="text-[11px] mt-1">Agenda</span>
-                        </a>
-                    </li>
-                    <li class="flex-1 text-center">
-                        <a href="data_santri.html" class="flex flex-col items-center justify-center py-3">
-                            <span class="text-2xl">👥</span>
-                            <span class="text-[11px] mt-1">Data</span>
-                        </a>
-                    </li>
-                </ul>
+        <nav class="fixed bottom-0 left-0 right-0 z-50 bg-gradient-to-b from-[#1e4680] to-[#111827] text-gray-100 border-t border-gray-800">
+            <div class="max-w-6xl mx-auto px-4 flex justify-between items-center">
+                <a href="index.html" class="flex-1 text-center flex flex-col items-center justify-center py-3">
+                    <span class="text-2xl">🏠</span>
+                    <span class="text-[11px] mt-1">Beranda</span>
+                </a>
+
+                <a href="program.html" class="flex-1 text-center flex flex-col items-center justify-center py-3">
+                    <span class="text-2xl">🎓</span>
+                    <span class="text-[11px] mt-1">Program</span>
+                </a>
+
+                <a href="jadwal.html" class="flex-1 text-center flex flex-col items-center justify-center py-3">
+                    <span class="text-2xl">🕘</span>
+                    <span class="text-[11px] mt-1">Jadwal</span>
+                </a>
+
+                <a href="agenda.html" class="flex-1 text-center flex flex-col items-center justify-center py-3">
+                    <span class="text-2xl">🗓️</span>
+                    <span class="text-[11px] mt-1">Agenda</span>
+                </a>
+
+                <a href="data_santri.html" class="flex-1 text-center flex flex-col items-center justify-center py-3">
+                    <span class="text-2xl">👥</span>
+                    <span class="text-[11px] mt-1">Data</span>
+                </a>
             </div>
         </nav>
-
     </header>
-    <section class="bg-gradient-to-b from-gray-100 to-gray-200 py-16 px-4 sm:px-6 lg:px-12">
+    <section class="bg-gradient-to-b from-gray-100 to-gray-200 py-9 px-4 sm:px-6 lg:px-12">
         <div class="max-w-6xl mx-auto">
-            <h3
-                class="font-sans font-extrabold text-[#D4AF37] text-4xl md:text-5xl uppercase italic mb-8 tracking-tighter">
-                Membangun Masa Depan Bersama Al-Qur'an
-            </h3>
+            <div class="my-8 px-4">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-[#1e4680] text-[#D4AF37] text-xs font-bold uppercase tracking-widest mb-2">
+                    <span class="w-2 h-2 rounded-full bg-[#D4AF37] animate-pulse"></span>
+                    Visi & Misi
+                    </span>
+                </div>
+                <h2 class="font-['Montserrat'] text-2xl sm:text-3xl md:text-4xl font-black text-[#1e4680] uppercase tracking-tight leading-tight">
+                    Membangun Masa Depan <br>
+                    <span class="text-[#D4AF37] drop-shadow-sm">Bersama Al-Qur'an!</span>
+                </h2>
+                <div class="flex justify-start mt-3">
+                    <div class="h-1.5 w-80 bg-gradient-to-l from-transparent to-[#D4AF37] rounded-full"></div>
+                </div>
+            </div>
 
             <div class="mb-12">
-                <img src="foto-kegiatan.jpg" alt="Kegiatan Santri"
-                    class="w-full h-[500px] object-cover rounded-sm border border-gray-800">
-                <p class="text-sm text-gray-500 mt-3 italic text-center">Suasana belajar santri dalam menjaga hafalan di
-                    waktu fajar.</p>
+                <img src="Album/foto-kegiatan.jpg" alt="Kegiatan Santri"
+                    class="w-full h-[500%] object-cover rounded-sm border border-gray-800">
+                <p class="text-[10px] text-gray-500 mt-1 italic text-center">Santri berdoa sebelum memulai halaqah.</p>
             </div>
 
             <div class="font-sans text-gray-800 space-y-6 text-base sm:text-lg leading-relaxed text-justify">
@@ -105,8 +168,9 @@
                 </p>
 
                 <div class="md:float-right md:ml-8 mb-6 w-full md:w-1/2">
-                    <img src="foto-ustadz.jpg" alt="Bimbingan"
+                    <img src="Album/bimbingan.jpg" alt="Bimbingan"
                         class="w-full h-64 object-cover rounded-sm border border-[#D4AF37]/30">
+                        <p class="text-[10px] text-gray-500 mt-1 italic text-center">Program Dirosa untuk Santri baru, Agar mencapai Kualitas Bacaan yang di tetapkan Pondok.</p>
                 </div>
 
                 <p>
@@ -132,66 +196,84 @@
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
 
-            <div class="bg-[#1e4680] p-8 border border-[#1e4680] hover:border-[#D4AF37] transition duration-500">
-                <img src="foto-santri.jpg" alt="Metode Hafalan"
-                    class="w-full h-48 object-cover mb-6 grayscale hover:grayscale-0 transition duration-500">
-                <h3 class="text-white text-xl font-bold mb-3 uppercase">Metode Terukur</h3>
-                <p class="text-gray-100 leading-relaxed">Fokus pada kualitas hafalan (Mutqin) dengan bimbingan intensif
-                    setiap harinya.</p>
+            <!-- KARTU 1 -->
+            <div class="bg-[#1e4680] p-2 sm:p-3 md:p-4 border-[#1e4680] hover:border-[#D4AF37] transition duration-500 w-full h-fit shadow-xl rounded-none">
+                <div class="relative h-56 sm:h-64 md:h-72 lg:h-80 overflow-hidden rounded-none
+                 border border-white/20 shadow-sm group leading-none">
+                    <img src="foto-santri.jpg" alt="Pengajar"
+                        class="absolute inset-0 w-full h-full object-cover transition duration-500 transform group-hover:scale-110 group-hover:brightness-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 p-4 text-left">
+                        <h3 class="text-white text-lg font-bold mb-2 uppercase">Metode Terukur</h3>
+                        <p class="text-gray-100 text-xs leading-relaxed">
+                            Fokus pada kualitas hafalan (Mutqin) dengan bimbingan intensif setiap harinya.
+                        </p>
+                    </div>
+                </div>
             </div>
 
-            <div class="bg-[#1e4680] p-8 border border-[#1e4680] hover:border-[#D4AF37] transition duration-500">
-                <img src="foto-pondok.jpg" alt="Fasilitas"
-                    class="w-full h-48 object-cover mb-6 grayscale hover:grayscale-0 transition duration-500">
-                <h3 class="text-white text-xl font-bold mb-3 uppercase">Lingkungan Asri</h3>
-                <p class="text-gray-100 leading-relaxed">Terletak di wilayah yang tenang, jauh dari kebisingan kota,
-                    ideal untuk menghafal.</p>
+            <!-- KARTU 2 -->
+            <div class="bg-[#1e4680] p-2 sm:p-3 md:p-4 border-[#1e4680] hover:border-[#D4AF37] transition duration-500 w-full h-fit shadow-xl rounded-none">
+                <div class="relative h-56 sm:h-64 md:h-72 lg:h-80 overflow-hidden rounded-none
+                 border border-white/20 shadow-sm group leading-none">
+                    <img src="Album/suasana.jpg" alt="Suasana"
+                        class="absolute inset-0 w-full h-full object-cover transition duration-500 transform group-hover:scale-110 group-hover:brightness-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 p-4 text-left">
+                        <h3 class="text-white text-lg font-bold mb-2 uppercase">Lingkungan Asri</h3>
+                        <p class="text-gray-100 text-xs leading-relaxed">
+                            Terletak di wilayah yang tenang dan kondusif, jauh dari kebisingan kota yang sangat di perlukan untuk fokus menghafal.
+                        </p>
+                    </div>
+                </div>
             </div>
-
-            <div class="bg-[#1e4680] p-8 border border-[#1e4680] hover:border-[#D4AF37] transition duration-500">
-                <img src="foto-guru.jpg" alt="Pengajar"
-                    class="w-full h-48 object-cover mb-6 grayscale hover:grayscale-0 transition duration-500">
-                <h3 class="text-white text-xl font-bold mb-3 uppercase">Pembimbing Sanad</h3>
-                <p class="text-gray-100 leading-relaxed">Dibimbing oleh ustadz berpengalaman yang menjaga tradisi
-                    keilmuan Al-Qur'an.</p>
+            <!-- KARTU 3 -->
+            <div class="bg-[#1e4680] p-2 sm:p-3 md:p-4 border-[#1e4680] hover:border-[#D4AF37] transition duration-500 w-full h-fit shadow-xl rounded-none">
+                <div class="relative h-56 sm:h-64 md:h-72 lg:h-80 overflow-hidden rounded-none
+                 border border-white/20 shadow-sm group leading-none">
+                    <img src="Album/berpengalaman.jpg" alt="Pengajar"
+                        class="absolute inset-0 w-full h-full object-cover transition duration-500 transform group-hover:scale-110 group-hover:brightness-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 p-4 text-left">
+                        <h3 class="text-white text-lg font-bold mb-2 uppercase">Pembimbing Berpengalaman</h3>
+                        <p class="text-gray-100 text-xs leading-relaxed">
+                            Dibimbing oleh ustadz berpengalaman yang menjaga tradisi keilmuan Al-Qur'an.
+                        </p>
+                    </div>
+                </div>
             </div>
-
-        </div>
     </section>
     <footer class="bg-gradient-to-b from-gray-400 to-gray-500 border-t border-gray-600 pt-16 pb-8">
         <div class="max-w-6xl mx-auto px-12">
             <div class="flex flex-col md:flex-row justify-between items-center mb-12">
 
                 <div class="mb-8 md:mb-0 text-left">
-                    <h3 class="font-sans font-extrabold text-[#D4AF37] text-2xl uppercase italic">DZU NURAIN</h3>
+                    <h3 class="text-[#D4AF37] text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-center md:text-left uppercase tracking-tighter leading-tight font-sans font-extrabold uppercase italic">DZU NURAIN</h3>
                     <p class="text-gray-600 text-sm tracking-widest uppercase">Kolaka Timur, Sulawesi Tenggara</p>
                 </div>
 
                 <div class="flex space-x-6">
-                    <a href="#" class="text-gray-600 hover:text-[#D4AF37] transition duration-300">
+                    <a href="https://www.instagram.com/ponpes_dzunurain/" class="text-gray-600 hover:text-[#D4AF37] transition duration-300">
                         <svg class="w-7 h-7 fill-current" viewBox="0 0 24 24">
                             <path
                                 d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
                         </svg>
                     </a>
-                    <a href="#"
-                        class="text-gray-600 hover:text-[#D4AF37] font-bold text-xl transition duration-300">TikTok</a>
+                    <a href="#" class="text-gray-600 hover:text-[#D4AF37] transition duration-300">
+                        <svg class="w-7 h-7 fill-current" viewBox="0 0 24 24">
+                            <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.68v13.67a2.89 2.89 0 1 1-5.66-2.06 2.89 2.89 0 0 1 2.46 1.29V9.16a6.55 6.55 0 1 0 5.63 5.63V9.4a8.1 8.1 0 0 0 4.54-1.38v-3.91" />
+                        </svg>
+                    </a>
                     <a href="#" class="text-gray-600 hover:text-[#D4AF37] transition duration-300">
                         <svg class="w-7 h-7 fill-current" viewBox="0 0 24 24">
                             <path
                                 d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z" />
                         </svg>
                     </a>
-                    <a href="#" class="text-gray-600 hover:text-[#D4AF37] transition duration-300">
+                    <a href="https://web.facebook.com/profile.php?id=100077117367404" class="text-gray-600 hover:text-[#D4AF37] transition duration-300">
                         <svg class="w-7 h-7 fill-current" viewBox="0 0 24 24">
                             <path
                                 d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z" />
-                        </svg>
-                    </a>
-                    <a href="#" class="text-gray-600 hover:text-[#D4AF37] transition duration-300">
-                        <svg class="w-7 h-7 fill-current" viewBox="0 0 24 24">
-                            <path
-                                d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
                         </svg>
                     </a>
                 </div>
@@ -203,6 +285,15 @@
             </div>
         </div>
     </footer>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+      // Menginisialisasi AOS dengan pengaturan default
+      AOS.init({
+        duration: 800, // Kecepatan animasi (800ms = 0.8 detik)
+        once: true,    // Animasi hanya berjalan 1x (tidak berulang saat scroll balik atas)
+        easing: 'ease-out', // Efek transisi halus
+      });
+    </script>
 </body>
 
 </html>
